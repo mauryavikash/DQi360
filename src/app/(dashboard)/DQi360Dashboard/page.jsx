@@ -213,7 +213,7 @@ export default function DashboardPage() {
   }
 
   return (
-    <main className="min-h-full p-3 text-slate-800" aria-busy={loading} data-has-error={Boolean(error)}>
+    <main className="min-h-full text-slate-800" aria-busy={loading} data-has-error={Boolean(error)}>
       <div className="mx-auto max-w-[1480px] space-y-3">
         <DQi360Header headerData={headerData} />
         <KpiCardsGrid items={normalizedKpis} />

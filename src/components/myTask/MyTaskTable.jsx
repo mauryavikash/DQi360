@@ -55,8 +55,8 @@ export default function MyTaskTable({ tasks = [], onOpenTask }) {
 
   return (
     <>
-      <section className="mt-4 rounded-[24px] bg-gradient-to-r from-[#EDF6F8] via-[#E8F5F8] to-[#DCE5FF] p-4">
-        <div className="flex items-center gap-4">
+      <section className="mt-4 rounded-[24px]">
+        <div className="flex items-center gap-2">
           <div className="relative flex-1">
             <Search
               size={22}

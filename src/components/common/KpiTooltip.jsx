@@ -11,7 +11,7 @@ export default function KpiTooltip({ invoiceCount, invoiceValue, children }) {
           absolute
           left-1/2
           bottom-full
-          z-20
+          z-50
           mb-2
           w-max
           max-w-[220px]
