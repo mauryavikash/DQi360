@@ -1,9 +1,8 @@
 import {
   Home,
-  Gift,
-  DollarSign,
-  Users,
-  Clock3,
+  FileText,
+  Layers3,
+  Network,
 } from "lucide-react";
 
 export const APP_NAME = "ReconFlow";
@@ -21,29 +20,25 @@ export const ROLE_OPTIONS = [
 
 export const NAV_ITEMS = [
   {
-    name: "Home",
-    href: "/home",
+    name: "Dashboard",
+    href: "/DQi360Dashboard",
     icon: Home,
   },
   {
-    name: "Cases",
-    href: "/cases",
-    icon: Gift,
+    name: "Issues",
+    href: "/issues",
+    icon: FileText,
   },
   {
-    name: "Recoveries",
-    href: "/recoveries",
-    icon: DollarSign,
+    name: "My Task",
+    href: "/myTask",
+    icon: Layers3,
   },
-  {
-    name: "Vendor",
-    href: "/vendor",
-    icon: Users,
-  },
+
   {
     name: "Audit",
     href: "/audit",
-    icon: Clock3,
+    icon: Network,
   },
 
   // {
