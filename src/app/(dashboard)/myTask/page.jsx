@@ -5,10 +5,7 @@ import MyTaskKpis from "@/components/myTask/MyTaskKpis";
 import MyTaskTable from "@/components/myTask/MyTaskTable";
 import MyTaskDetail from "@/components/myTask/MyTaskDetail";
 import { LoadingState } from "@/components/common/LoadingState";
-import {
-  getMyTasks,
-  getMyTaskDetails,
-} from "@/app/lib/api";
+import { getMyTasks, getMyTaskDetails } from "@/app/lib/api";
 const KPI_PRESENTATION = [
   ["to_do", "To Do", "Tasks assigned to you", "todo"],
   ["in_progress", "In Progress", "Tasks in progress", "progress"],
@@ -18,7 +15,11 @@ const KPI_PRESENTATION = [
 
 function formatDate(value) {
   if (!value) return "-";
-  return new Intl.DateTimeFormat("en-GB", { day: "2-digit", month: "short", year: "numeric" }).format(new Date(`${value}T00:00:00`));
+  return new Intl.DateTimeFormat("en-GB", {
+    day: "2-digit",
+    month: "short",
+    year: "numeric",
+  }).format(new Date(`${value}T00:00:00`));
 }
 
 function normalizeTask(task) {
@@ -42,42 +43,35 @@ export default function MyTaskPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [selectedTask, setSelectedTask] = useState(null);
-const [showDetails, setShowDetails] = useState(false);
+  const [showDetails, setShowDetails] = useState(false);
 
-const handleOpenTask = async (
-  task,
-  action = ""
-) => {
-  try {
-    setLoading(true);
+  const handleOpenTask = async (task, action = "") => {
+    try {
+      setLoading(true);
 
-    const sessionUser = JSON.parse(
-      sessionStorage.getItem("user") || "null"
-    );
+      const sessionUser = JSON.parse(sessionStorage.getItem("user") || "null");
 
-    const userName = sessionUser?.name;
+      const userEmail = sessionUser?.email;
 
-    const response =
-      await getMyTaskDetails(
-        userName,
-        task.issueId,
-        action
-      );
+const response = await getMyTaskDetails(
+  userEmail,
+  task.issueId,
+  action
+);
 
-    setSelectedTask(response);
-    setShowDetails(true);
-  } catch (error) {
-    console.error(error);
-  } finally {
-    setLoading(false);
-  }
-};
+      setSelectedTask(response);
+      setShowDetails(true);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
-const handleBack = () => {
-  setShowDetails(false);
-  setSelectedTask(null);
-};
-
+  const handleBack = () => {
+    setShowDetails(false);
+    setSelectedTask(null);
+  };
 
   useEffect(() => {
     let isMounted = true;
@@ -108,7 +102,7 @@ const handleBack = () => {
         const hasPayload = Boolean(
           payload &&
           typeof payload === "object" &&
-          Object.keys(payload)?.length
+          Object.keys(payload)?.length,
         );
 
         if (isMounted) {
@@ -134,104 +128,116 @@ const handleBack = () => {
     };
   }, []);
 
+  //   useEffect(() => {
+  //   let isMounted = true;
+  //   let sessionUser;
 
-//   useEffect(() => {
-//   let isMounted = true;
-//   let sessionUser;
+  //   try {
+  //     sessionUser = JSON.parse(
+  //       sessionStorage.getItem("user") ?? "null"
+  //     );
+  //   } catch {
+  //     sessionUser = null;
+  //   }
 
-//   try {
-//     sessionUser = JSON.parse(
-//       sessionStorage.getItem("user") ?? "null"
-//     );
-//   } catch {
-//     sessionUser = null;
-//   }
+  //   const currentUserEmail = sessionUser?.email;
 
-//   const currentUserEmail = sessionUser?.email;
+  //   const OWNER_EMAILS = [
+  //     "unnati.gaur@capgemini.com",
+  //     "d-vigneshwaran.d-vigneshwaran@capgemini.com",
+  //     "vikash-chand.maury@capgemini.com",
+  //   ];
 
-//   const OWNER_EMAILS = [
-//     "unnati.gaur@capgemini.com",
-//     "d-vigneshwaran.d-vigneshwaran@capgemini.com",
-//     "vikash-chand.maury@capgemini.com",
-//   ];
+  //   const isOwner = OWNER_EMAILS.includes(
+  //     currentUserEmail?.toLowerCase()
+  //   );
 
-//   const isOwner = OWNER_EMAILS.includes(
-//     currentUserEmail?.toLowerCase()
-//   );
+  //   async function loadWorkbenchData() {
+  //     try {
+  //       setError(null);
 
-//   async function loadWorkbenchData() {
-//     try {
-//       setError(null);
+  //       const response = isOwner
+  //         ? await getMyTasks("ALL")
+  //         : await getMyTasks(currentUserEmail);
 
-//       const response = isOwner
-//         ? await getMyTasks("ALL")
-//         : await getMyTasks(currentUserEmail);
+  //       const payload = response?.data ?? response;
 
-//       const payload = response?.data ?? response;
+  //       if (isMounted) {
+  //         setWorkbenchApiData(payload);
+  //       }
+  //     } catch (error) {
+  //       console.error(error);
+  //       if (isMounted) {
+  //         setError(error);
+  //       }
+  //     } finally {
+  //       if (isMounted) {
+  //         setLoading(false);
+  //       }
+  //     }
+  //   }
 
-//       if (isMounted) {
-//         setWorkbenchApiData(payload);
-//       }
-//     } catch (error) {
-//       console.error(error);
-//       if (isMounted) {
-//         setError(error);
-//       }
-//     } finally {
-//       if (isMounted) {
-//         setLoading(false);
-//       }
-//     }
-//   }
+  //   loadWorkbenchData();
 
-//   loadWorkbenchData();
+  //   return () => {
+  //     isMounted = false;
+  //   };
+  // }, []);
 
-//   return () => {
-//     isMounted = false;
-//   };
-// }, []);
-
-  const tasks = useMemo(() => (workbenchApiData?.tasks ?? []).map(normalizeTask), [workbenchApiData]);
-  const summary = useMemo(() => KPI_PRESENTATION.map(([key, title, subtitle, type]) => ({ title, subtitle, type, value: Number(workbenchApiData?.summary?.[key] ?? 0) })), [workbenchApiData]);
+  // const tasks = useMemo(
+  //   () => (workbenchApiData?.tasks ?? []).map(normalizeTask),
+  //   [workbenchApiData],
+  // );
+  const tasks = useMemo(
+  () => workbenchApiData?.tasks ?? [],
+  [workbenchApiData]
+);
+  const summary = useMemo(
+    () =>
+      KPI_PRESENTATION.map(([key, title, subtitle, type]) => ({
+        title,
+        subtitle,
+        type,
+        value: Number(workbenchApiData?.summary?.[key] ?? 0),
+      })),
+    [workbenchApiData],
+  );
 
   if (loading) {
     return <LoadingState label="Loading workbench data..." />;
   }
 
-
   return (
-    <main className="min-h-full text-slate-700" aria-busy={loading} data-has-error={Boolean(error)}>
+    <main
+      className="min-h-full text-slate-700"
+      aria-busy={loading}
+      data-has-error={Boolean(error)}
+    >
       <div className="mx-auto max-w-[1600px]">
         <header className="flex items-start justify-between">
           <div>
-              <h1 className="text-[18px] font-bold leading-5 text-slate-800">My Tasks</h1>
+            <h1 className="text-[18px] font-bold leading-5 text-slate-800">
+              My Tasks
+            </h1>
 
             <p className="mt-0.5 text-[12px] text-slate-500">
               Assigned customer master data quality work
             </p>
           </div>
-
-         
         </header>
 
         {/* {selectedTask ? 
         <MyTaskDetail task={selectedTask} onBack={() => setSelectedTask(null)} /> : <><MyTaskKpis summary={summary} />
         <MyTaskTable tasks={tasks} onOpenTask={setSelectedTask} /></>} */}
         {showDetails ? (
-            <MyTaskDetail
-              task={selectedTask}
-              onBack={handleBack}
-            />
-          ) : (
-            <>
-              <MyTaskKpis summary={summary} />
+          <MyTaskDetail task={selectedTask} onBack={handleBack} />
+        ) : (
+          <>
+            <MyTaskKpis summary={summary} />
 
-              <MyTaskTable
-                tasks={tasks}
-                onOpenTask={handleOpenTask}
-              />
-            </>
-          )}
+            <MyTaskTable tasks={tasks} onOpenTask={handleOpenTask} />
+          </>
+        )}
       </div>
     </main>
   );
