@@ -10,7 +10,7 @@ import IssuesActivity from "@/components/issuesDetails/IssuesActivity";
 
 import { LoadingState } from "@/components/common/LoadingState";
 import { EmptyState } from "@/components/common/EmptyState";
-import { getIssues } from "@/app/lib/api";
+import { getIssues, getIssueDetails } from "@/app/lib/api";
 
 function formatDetectedDate(value) {
   if (!value) return "-";
@@ -47,11 +47,22 @@ export default function IssuesPage() {
   const [selectedIssue, setSelectedIssue] = useState(null);
   const [showDetails, setShowDetails] = useState(false);
 
-  const handleReview = (issue) => {
-  setSelectedIssue(issue);
-  setShowDetails(true);
-  };
+  const handleReview = async (issue) => {
+    try {
+      setLoading(true);
 
+      const detailResponse = await getIssueDetails(issue.issueId);
+
+      const detailData = detailResponse?.data ?? detailResponse;
+
+      setSelectedIssue(detailData);
+      setShowDetails(true);
+    } catch (error) {
+      console.error("Issue Details API Error:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
   const handleBack = () => {
     setShowDetails(false);
     setSelectedIssue(null);
@@ -69,7 +80,7 @@ export default function IssuesPage() {
         const hasPayload = Boolean(
           payload &&
           typeof payload === "object" &&
-          Object.keys(payload)?.length
+          Object.keys(payload)?.length,
         );
 
         if (isMounted) {
@@ -97,7 +108,7 @@ export default function IssuesPage() {
 
   const issuesData = useMemo(
     () => (issuesApiData?.issues ?? []).map(normalizeIssue),
-    [issuesApiData]
+    [issuesApiData],
   );
 
   if (loading) {
@@ -116,9 +127,11 @@ export default function IssuesPage() {
   }
 
   return (
-    <main className="min-h-full text-slate-700" aria-busy={loading}
-    //  data-has-error={Boolean(error)}
-     >
+    <main
+      className="min-h-full text-slate-700"
+      aria-busy={loading}
+      //  data-has-error={Boolean(error)}
+    >
       <div className="mx-auto max-w-[1600px]">
         <header className="flex items-start justify-between">
           <div>
@@ -127,7 +140,8 @@ export default function IssuesPage() {
             </h1>
 
             <p className="mt-0.5 text-[10px] text-slate-500">
-              {issuesData.length.toLocaleString()} open deterministic DQ-rule findings
+              {issuesData.length.toLocaleString()} open deterministic DQ-rule
+              findings
             </p>
           </div>
         </header>
@@ -144,29 +158,35 @@ export default function IssuesPage() {
                 breadcrumb: [
                   { label: "Home" },
                   { label: "Issues" },
-                  { label: selectedIssue.issueId, active: true },
+                  {
+                    label:
+                      selectedIssue?.issue?.issue_id ||
+                      selectedIssue?.issueId ||
+                      "-",
+                    active: true,
+                  },
                 ],
                 title: "Issue Detail & Remediation",
-                subtitle: "View rule details, evidence and propose a corrected value",
-                issue: selectedIssue,
+                subtitle:
+                  "View rule details, evidence and propose a corrected value",
+                issue: selectedIssue?.issue || {},
                 onBack: handleBack,
               }}
             />
-
-            <IssuesDetailsHeader
-              issueDetailData={selectedIssue}
-            />
+            <IssuesDetailsHeader issueDetailData={selectedIssue?.issue} />
 
             <div className="mt-3 grid gap-3 lg:grid-cols-[minmax(0,1.85fr)_minmax(280px,0.95fr)]">
-              <IssuesDetailsCustomer issueData={selectedIssue} />
+              <IssuesDetailsCustomer issueData={selectedIssue?.issue} />
               <aside className="space-y-3">
-                <IssuesCustomerContext issueData={selectedIssue} />
-                <IssuesActivity issueData={selectedIssue} />
+                <IssuesCustomerContext issueData={selectedIssue?.issue} />
+                <IssuesActivity
+                  comments={selectedIssue?.comments || []}
+                  audit={selectedIssue?.audit || []}
+                />
               </aside>
             </div>
           </>
         )}
-
       </div>
     </main>
   );

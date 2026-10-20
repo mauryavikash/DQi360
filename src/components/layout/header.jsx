@@ -73,30 +73,30 @@ export default function Header({ setIsOpen, isOpen }) {
   useEffect(() => {
     const loadAgents = async () => {
       try {
-        const data = await getAgentStatus();
+        // const data = await getAgentStatus();
 
-        const agents = (data?.agents || []).map((agent, index) =>
-          normalizeAgent(agent, index),
-        );
+        // const agents = (data?.agents || []).map((agent, index) =>
+        //   normalizeAgent(agent, index),
+        // );
 
-        const live = agents.filter((agent) => agent.status === "live");
-        const standby = agents.filter((agent) =>
-          ["standby", "idle", "paused"].includes(agent.status),
-        );
+        // const live = agents.filter((agent) => agent.status === "live");
+        // const standby = agents.filter((agent) =>
+        //   ["standby", "idle", "paused"].includes(agent.status),
+        // );
 
         // Fallback for legacy payloads where status is absent but IDs are prefixed.
-        const resolvedLive =
-          live.length > 0
-            ? live
-            : agents.filter((agent) => agent.agent_id?.startsWith("A"));
+        // const resolvedLive =
+        //   live.length > 0
+        //     ? live
+        //     : agents.filter((agent) => agent.agent_id?.startsWith("A"));
 
-        const resolvedStandby =
-          standby.length > 0
-            ? standby
-            : agents.filter((agent) => agent.agent_id?.startsWith("S"));
+        // const resolvedStandby =
+        //   standby.length > 0
+        //     ? standby
+        //     : agents.filter((agent) => agent.agent_id?.startsWith("S"));
 
-        setLiveAgents(resolvedLive);
-        setStandbyAgents(resolvedStandby);
+        // setLiveAgents(resolvedLive);
+        // setStandbyAgents(resolvedStandby);
       } catch (error) {
         console.error("Agent API Error:", error);
       }
@@ -107,9 +107,9 @@ export default function Header({ setIsOpen, isOpen }) {
   useEffect(() => {
     const loadNotifications = async () => {
       try {
-        const data = await getNotifications();
+        // const data = await getNotifications();
 
-        setNotifications(data?.notifications || []);
+        // setNotifications(data?.notifications || []);
       } catch (error) {
         console.error("Notification API Error:", error);
       }
@@ -157,7 +157,7 @@ export default function Header({ setIsOpen, isOpen }) {
   if (pathname) {
     if (pathname === "/DQi360Dashboard") title = "Dashboard";
     else if (pathname === "/issues") title = "Issues";
-    else if (pathname === "/myTasks") title = "My Tasks";
+    else if (pathname === "/myTask") title = "My Tasks";
     else if (pathname === "/audit") title = "Audit";
     // else if (pathname === "/reports") title = "Reports & Analytics";
     // else if (pathname === "/settings") title = "Configuration";

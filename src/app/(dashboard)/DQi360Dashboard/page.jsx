@@ -230,3 +230,119 @@ export default function DashboardPage() {
     </main>
   );
 }
+
+// "use client";
+
+// import { useEffect, useState } from "react";
+// import KpiCardsGrid from "@/components/common/KpiCardsGrid";
+// import DQi360Chart from "@/components/DQi360Dashboard/DQi360Chart";
+// import DQi360Issues from "@/components/DQi360Dashboard/DQi360Issues";
+// import DQi360Footer from "@/components/DQi360Dashboard/DQi360Footer";
+// import DQi360Header from "@/components/DQi360Dashboard/DQi360Header";
+// import { LoadingState } from "@/components/common/LoadingState";
+// import { EmptyState } from "@/components/common/EmptyState";
+// import { getDashboard } from "@/app/lib/api";
+
+// export default function DashboardPage() {
+//   const [dashboardData, setDashboardData] = useState(null);
+//   const [loading, setLoading] = useState(true);
+
+//   const [selectedPeriod, setSelectedPeriod] = useState("");
+//   const [selectedSource, setSelectedSource] = useState("");
+//   const [selectedCountry, setSelectedCountry] = useState("");
+//   const [selectedBusinessUnit, setSelectedBusinessUnit] =
+//     useState("");
+
+//   useEffect(() => {
+//     let isMounted = true;
+
+//     async function loadDashboard() {
+//       try {
+//         setLoading(true);
+
+//         const response = await getDashboard({
+//           period: selectedPeriod,
+//           source_system: selectedSource,
+//           country: selectedCountry,
+//           business_unit: selectedBusinessUnit,
+//         });
+
+//         const payload = response?.data ?? response;
+
+//         if (isMounted) {
+//           setDashboardData(payload);
+//         }
+//       } catch (err) {
+//         console.error(err);
+
+//         if (isMounted) {
+//           setDashboardData(null);
+//         }
+//       } finally {
+//         if (isMounted) {
+//           setLoading(false);
+//         }
+//       }
+//     }
+
+//     loadDashboard();
+
+//     return () => {
+//       isMounted = false;
+//     };
+//   }, [
+//     selectedPeriod,
+//     selectedSource,
+//     selectedCountry,
+//     selectedBusinessUnit,
+//   ]);
+
+//   if (loading) {
+//     return (
+//       <LoadingState label="Loading dashboard..." />
+//     );
+//   }
+
+//   if (!dashboardData) {
+//     return (
+//       <EmptyState
+//         title="No Dashboard Data"
+//         description="No data returned from API."
+//       />
+//     );
+//   }
+
+//   return (
+//     <main className="space-y-3">
+//       <DQi360Header
+//         filters={dashboardData?.filters}
+//         selectedPeriod={selectedPeriod}
+//         setSelectedPeriod={setSelectedPeriod}
+//         selectedSource={selectedSource}
+//         setSelectedSource={setSelectedSource}
+//         selectedCountry={selectedCountry}
+//         setSelectedCountry={setSelectedCountry}
+//         selectedBusinessUnit={selectedBusinessUnit}
+//         setSelectedBusinessUnit={
+//           setSelectedBusinessUnit
+//         }
+//       />
+
+//       {/* Existing Dashboard Components */}
+
+//       <KpiCardsGrid
+//         items={dashboardData?.kpis || []}
+//       />
+
+//       <DQi360Chart
+//         chartData={dashboardData}
+//       />
+
+//       <DQi360Issues
+//         issuesData={dashboardData}
+//       />
+
+//       <DQi360Footer />
+//     </main>
+//   );
+// }

@@ -33,11 +33,11 @@ function Group({ title, subtitle, icon: Icon, children, defaultOpen = false }) {
       >
         <Icon size={16} className="shrink-0 text-white" />
         <span className="min-w-0 flex-1">
-          <span className="block text-[10px] font-semibold text-white">
+          <span className="block text-[12px] font-semibold text-white">
             {title}
           </span>
           {subtitle && (
-            <span className="block text-[7px] text-white/55">{subtitle}</span>
+            <span className="block text-[10px] text-white/55">{subtitle}</span>
           )}
         </span>
         {open ? (
@@ -70,7 +70,7 @@ export default function Navbar({ isCollapsed = false }) {
     );
   return (
     <nav className="flex w-full flex-col gap-1">
-      <p className="px-3 pb-1 pt-1 text-[10px] font-semibold text-white">
+      <p className="px-3 pb-1 pt-1 text-[12px] font-semibold text-white">
         Master Data - Category
       </p>
       <Group
@@ -84,7 +84,7 @@ export default function Navbar({ isCollapsed = false }) {
             <Link
               key={href}
               href={href}
-              className={`flex items-center gap-3 rounded-md px-3 py-2 text-[9px] font-semibold ${pathname === href ? "bg-[#1B3155] text-white" : "text-white/80 hover:bg-white/10 hover:text-white"}`}
+              className={`flex items-center gap-3 rounded-md px-3 py-2 text-[12px] font-semibold ${pathname === href ? "bg-[#1B3155] text-white" : "text-white/80 hover:bg-white/10 hover:text-white"}`}
             >
               <Icon size={14} />
               {name}
@@ -112,23 +112,23 @@ export function SidebarCapabilities({ isCollapsed = false }) {
     );
   return (
     <div className="mt-auto border-t border-white/10 px-3 py-4">
-      <p className="text-[10px] font-semibold text-white">
+      <p className="text-[12px] font-semibold text-white">
         Future Capabilities
       </p>
-      <p className="mb-3 text-[7px] text-white/55">Coming soon</p>
+      <p className="mb-3 text-[10px] text-white/55">Coming soon</p>
       <div className="space-y-3">
         <div className="flex items-center gap-3 text-white">
           <MessageCircle size={16} />
           <div>
-            <p className="text-[10px] font-semibold">Conversational BI</p>
-            <p className="text-[7px] text-white/55">Coming soon</p>
+            <p className="text-[12px] font-semibold">Conversational BI</p>
+            <p className="text-[10px] text-white/55">Coming soon</p>
           </div>
         </div>
         <div className="flex items-center gap-3 text-white">
           <Bot size={16} />
           <div>
-            <p className="text-[10px] font-semibold">AI Command Center</p>
-            <p className="text-[7px] text-white/55">Coming soon</p>
+            <p className="text-[12px] font-semibold">AI Command Center</p>
+            <p className="text-[10px] text-white/55">Coming soon</p>
           </div>
         </div>
       </div>
