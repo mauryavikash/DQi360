@@ -43,7 +43,7 @@ export default function DashboardLayout({ children }) {
 
                 <div
                     className={`flex flex-1 flex-col overflow-hidden transition-all duration-300 ${
-                        isSidebarOpen ? "lg:pl-[170px]" : "lg:pl-14"
+                        isSidebarOpen ? "lg:pl-[220px]" : "lg:pl-14"
                     }`}
                 >
                     <Header
