@@ -11,7 +11,10 @@ import {
   MoreVertical,
   ArrowUpDown,
   AlertTriangle,
+  X,
 } from "lucide-react";
+import { assignIssue } from "@/app/lib/api";
+import { toast } from "sonner";
 
 const SEVERITY_ORDER = {
   Critical: 1,
@@ -55,10 +58,14 @@ export default function IssuesTable({ data = [], filters = {}, onReview }) {
   const [owner, setOwner] = useState("All");
   const [country, setCountry] = useState("All");
   const [currentPage, setCurrentPage] = useState(1);
-  const [pageSize, setPageSize] = useState(25);
+  const [pageSize, setPageSize] = useState(10);
   const [showFilters, setShowFilters] = useState(true);
   const [criticalFirst, setCriticalFirst] = useState(true);
-
+const [selectedIssueId, setSelectedIssueId] = useState(null);
+const [showAssignPopup, setShowAssignPopup] = useState(false);
+const [assignName, setAssignName] = useState("");
+const [assignStatus, setAssignStatus] = useState("In Progress");
+const [isSaving, setIsSaving] = useState(false);
   const severityColors = {
     Critical: "bg-[#FDECEC] text-[#D92D20]",
     High: "bg-[#FDECEC] text-[#F04438]",
@@ -173,16 +180,16 @@ export default function IssuesTable({ data = [], filters = {}, onReview }) {
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder="Search by Issue ID, Customer ID, customer name or rule..."
-            className="h-[34px] w-full rounded-md border border-[#D9E1EF] bg-white pl-9 pr-4 text-[10px] outline-none"
+            className="h-[34px] w-full rounded-md border border-[#D9E1EF] bg-white pl-9 pr-4 text-[12px] outline-none"
           />
         </div>
 
-        <button onClick={() => setShowFilters((visible) => !visible)} className="flex h-[34px] items-center gap-1.5 rounded-md bg-[#1565F9] px-3 text-[10px] font-semibold text-white">
+        <button onClick={() => setShowFilters((visible) => !visible)} className="flex h-[34px] items-center gap-1.5 rounded-md bg-[#1565F9] px-3 text-[12px] font-semibold text-white">
           <Filter size={14} />
           Filters
         </button>
 
-        <button onClick={exportRows} className="flex h-[34px] items-center gap-1.5 rounded-md bg-[#1565F9] px-3 text-[10px] font-semibold text-white">
+        <button onClick={exportRows} className="flex h-[34px] items-center gap-1.5 rounded-md bg-[#1565F9] px-3 text-[12px] font-semibold text-white">
           <Download size={14} />
           Export
         </button>
@@ -237,7 +244,7 @@ export default function IssuesTable({ data = [], filters = {}, onReview }) {
 
         <button
           onClick={handleClearAll}
-          className="ml-auto text-[#1565F9] text-[14px] font-medium"
+          className="ml-auto text-[#1565F9] text-[12px] font-medium"
         >
           Clear all
         </button>
@@ -247,11 +254,11 @@ export default function IssuesTable({ data = [], filters = {}, onReview }) {
 
       <div className="mt-6 overflow-hidden rounded-[10px] border border-[#D9E1EF] bg-white shadow-sm">
         <div className="flex items-center justify-between px-3 py-3">
-          <h3 className="text-[11px] font-semibold text-[#1D2939]">
+          <h3 className="text-[12px] font-semibold text-[#1D2939]">
             {filteredData.length.toLocaleString()} issues found
           </h3>
 
-          <button onClick={() => setCriticalFirst((value) => !value)} className="flex items-center gap-1 text-[10px]">
+          <button onClick={() => setCriticalFirst((value) => !value)} className="flex items-center gap-1 text-[12px]">
             <ArrowUpDown size={16} className="text-[#1565F9]" />
 
             <span className="text-[#667085]">Sorted by:</span>
@@ -287,7 +294,7 @@ export default function IssuesTable({ data = [], filters = {}, onReview }) {
               {paginatedData.map((item) => (
                 <tr
                   key={item.issueId}
-                  className="border-t border-[#EAECF0] text-[13px] text-[#475467]"
+                  className="border-t border-[#EAECF0] text-[12px] text-[#475467]"
                 >
                   <td className="px-2 py-3 text-[#1565F9]">{item.issueId}</td>
 
@@ -331,15 +338,26 @@ export default function IssuesTable({ data = [], filters = {}, onReview }) {
                   <td className="px-4 py-4">
                     <button
                         onClick={() => onReview(item)}
-                        className="h-[24px] min-w-[62px] rounded-md border border-[#3B82F6] text-[10px] font-semibold text-[#155EEF] hover:bg-blue-50"
+                        className="h-[24px] min-w-[62px] rounded-md border border-[#3B82F6] text-[12px] font-semibold text-[#155EEF] hover:bg-blue-50"
                         >
                         Review
                         </button>
                   </td>
 
-                  <td className="px-4 py-4">
-                    <MoreVertical size={16} className="text-[#667085]" />
-                  </td>
+                 <td className="px-4 py-4">
+                 <button
+  onClick={() => {
+    setAssignName("");
+    setAssignStatus("In Progress");
+    setSelectedIssueId(item.issueId);
+    setShowAssignPopup(true);
+  }}
+  className="h-[24px] min-w-[62px] cursor-pointer rounded-md border border-[#3B82F6] text-[12px] font-semibold text-[#155EEF] hover:bg-blue-50"
+>
+  Assign
+</button>
+
+                </td>
                 </tr>
               ))}
             </tbody>
@@ -350,13 +368,13 @@ export default function IssuesTable({ data = [], filters = {}, onReview }) {
 
         <div className="flex items-center justify-between border-t border-[#EAECF0] px-4 py-5">
           <div className="flex items-center gap-4">
-            <span className="text-[#667085] text-[14px]">Rows per page</span>
+            <span className="text-[#667085] text-[12px]">Rows per page</span>
 
             <select value={pageSize} onChange={(event) => setPageSize(Number(event.target.value))} className="rounded-md border border-[#D0D5DD] px-3 py-1 text-[#1565F9] font-semibold">
               {[10, 25, 50].map((size) => <option key={size} value={size}>{size}</option>)}
             </select>
 
-            <span className="text-[14px] text-[#344054]">
+            <span className="text-[12px] text-[#344054]">
               {filteredData.length === 0 ? 0 : (visiblePage - 1) * pageSize + 1} – {Math.min(visiblePage * pageSize, filteredData.length)} of {filteredData.length}
             </span>
           </div>
@@ -394,6 +412,107 @@ export default function IssuesTable({ data = [], filters = {}, onReview }) {
           </div>
         </div>
       </div>
+
+      {showAssignPopup && (
+  <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/40">
+    <div className="w-[420px] rounded-xl bg-white p-5 shadow-xl">
+      <div className="flex items-center justify-between">
+        <h3 className="text-[12px] font-bold">
+          Assign Issue
+        </h3>
+
+        <button
+          onClick={() =>
+            setShowAssignPopup(false)
+          }
+        >
+          <X size={18} />
+        </button>
+      </div>
+
+      <div className="mt-4">
+        <label className="mb-1 block text-[12px] font-medium">
+          Name
+        </label>
+
+       <input
+  type="text"
+  value={assignName}
+  onChange={(e) =>
+    setAssignName(e.target.value)
+  }
+  placeholder="Type assignee name"
+  className="h-10 w-full rounded-md border border-[#D0D5DD] px-3 outline-none focus:border-[#1565F9]"
+/>
+      </div>
+
+      <div className="mt-4">
+        <label className="mb-1 block text-[12px] font-medium">
+          Status
+        </label>
+
+        <select
+          value={assignStatus}
+          onChange={(e) =>
+            setAssignStatus(e.target.value)
+          }
+          className="h-10 w-full rounded-md border px-3"
+        >
+          <option>In Progress</option>
+          <option>Open</option>
+        </select>
+      </div>
+
+      <div className="mt-5 flex justify-end gap-2">
+        <button
+          onClick={() =>
+            setShowAssignPopup(false)
+          }
+          className="rounded-md border px-4 py-2"
+        >
+          Cancel
+        </button>
+
+      <button
+  disabled={!assignName.trim() || isSaving}
+  onClick={async () => {
+    setIsSaving(true);
+
+    const toastId = toast.loading("Saving...");
+
+    try {
+      await assignIssue(selectedIssueId, {
+        assigned_to: assignName,
+        status: assignStatus,
+      });
+
+      toast.success("Action completed successfully", {
+        id: toastId,
+      });
+
+      setShowAssignPopup(false);
+      setAssignName("");
+      setAssignStatus("In Progress");
+    } catch (error) {
+      toast.error(
+        error?.response?.data?.message ||
+          "Something went wrong",
+        {
+          id: toastId,
+        }
+      );
+
+      setIsSaving(false);
+    }
+  }}
+  className="cursor-pointer rounded-md bg-[#1565F9] px-4 py-2 text-white disabled:cursor-not-allowed disabled:bg-slate-300"
+>
+  {isSaving ? "Saving..." : "Save"}
+</button>
+      </div>
+    </div>
+  </div>
+)}
     </div>
   );
 }

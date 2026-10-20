@@ -76,7 +76,7 @@ export default function MyTaskTable({ tasks = [], onOpenTask }) {
                 bg-white
                 pl-12
                 pr-4
-                text-[13px]
+                text-[12px]
                 font-normal
                 text-[#24324B]
                 placeholder:text-[#7C8BA5]
@@ -95,7 +95,7 @@ export default function MyTaskTable({ tasks = [], onOpenTask }) {
               rounded-[14px]
               bg-[#0B63F6]
               px-5
-              text-[13px]
+              text-[12px]
               font-semibold
               text-white
             "
@@ -104,14 +104,14 @@ export default function MyTaskTable({ tasks = [], onOpenTask }) {
             Filters
           </button>
 
-          <div className="whitespace-nowrap text-[13px] text-[#24324B]">
+          <div className="whitespace-nowrap text-[12px] text-[#24324B]">
             Sort by :-
             <span className="ml-1 font-semibold text-[#0B63F6]">
               Severity and age
             </span>
 
             <ChevronDown
-              size={14}
+              size={12}
               className="ml-1 inline text-[#0B63F6]"
             />
           </div>
@@ -148,7 +148,7 @@ export default function MyTaskTable({ tasks = [], onOpenTask }) {
                   border-[#D9E0EB]
                   bg-white
                   px-3
-                  text-[13px]
+                  text-[12px]
                   text-[#24324B]
                   outline-none
                 "
@@ -234,7 +234,10 @@ export default function MyTaskTable({ tasks = [], onOpenTask }) {
                   </td>
 
                   <td className="p-4">
-                    <button onClick={() => onOpenTask?.(row)} className="rounded-lg border border-blue-500 px-8 py-2 font-semibold text-blue-600">
+                    <button
+                      onClick={() => onOpenTask?.(row)}
+                      className="rounded-lg border border-blue-500 px-8 py-2 font-semibold text-blue-600"
+                    >
                       {row.status === "In Progress"
                         ? "Continue"
                         : "Start"}

@@ -207,27 +207,87 @@ export async function getIssues() {
 
   return issuesRequest;
 }
+export async function getIssueDetails(issueId) {
+  const response = await axiosInstance.get(
+    `api/dq/issues-screen/${encodeURIComponent(issueId)}`
+  );
 
-export async function getMyTasks(userName) {
-  if (!userName) {
-    throw new Error("A user name is required to load tasks");
+  return response.data;
+}
+export async function submitIssueProposal(issueId, payload) {
+  const response = await axiosInstance.post(
+    `api/dq/issues/${encodeURIComponent(issueId)}/propose`,
+    payload
+  );
+
+  return response.data;
+}
+export async function assignIssue(issueId, payload) {
+  const response = await axiosInstance.post(
+    `api/dq/issues/${encodeURIComponent(issueId)}/assign`,
+    payload
+  );
+
+  return response.data;
+}
+// export async function getMyTasks(userName) {
+//   if (!userName) {
+//     throw new Error("A user name is required to load tasks");
+//   }
+
+//   if (!myTasksRequests.has(userName)) {
+//     const request = axiosInstance
+//       .get(`api/dq/tasks-screen/${encodeURIComponent(userName)}`)
+//       .then((response) => response.data)
+//       .catch((error) => {
+//         myTasksRequests.delete(userName);
+//         throw error;
+//       });
+
+//     myTasksRequests.set(userName, request);
+//   }
+
+//   return myTasksRequests.get(userName);
+// }
+export async function getMyTasks(email) {
+  if (!email) {
+    throw new Error("User email is required to load tasks");
   }
 
-  if (!myTasksRequests.has(userName)) {
+  if (!myTasksRequests.has(email)) {
     const request = axiosInstance
-      .get(`api/dq/tasks-screen/${encodeURIComponent(userName)}`)
+      // .get(`api/dq/tasks-screen/${encodeURIComponent(email)}`)
+      .get(`api/dq/tasks-screen/${email}`)
       .then((response) => response.data)
       .catch((error) => {
-        myTasksRequests.delete(userName);
+        myTasksRequests.delete(email);
         throw error;
       });
 
-    myTasksRequests.set(userName, request);
+    myTasksRequests.set(email, request);
   }
 
-  return myTasksRequests.get(userName);
+  return myTasksRequests.get(email);
 }
+export async function getMyTaskDetails(
+  email,
+  issueId,
+  action
+) {
+  const params = new URLSearchParams({
+    issue_id: issueId,
+  });
 
+  if (action) {
+    params.append("action", action);
+  }
+
+  const response = await axiosInstance.get(
+    `api/dq/tasks-screen/${email}?${params.toString()}`
+  );
+
+  return response.data;
+}
 export async function getAudit() {
   if (!auditRequest) {
     auditRequest = axiosInstance

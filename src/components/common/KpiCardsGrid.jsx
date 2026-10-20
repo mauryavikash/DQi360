@@ -40,7 +40,8 @@ export default function KpiCardsGrid({
         gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 144px), 1fr))",
       }}
     >
-      {items.map((item) => {
+     {Array.isArray(items) &&
+  items.map((item) => {
         const Icon = item.icon;
         return (
           <KpiTooltip

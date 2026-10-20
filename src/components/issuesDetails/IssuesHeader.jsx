@@ -14,14 +14,12 @@ export default function IssuesHeader({ issueHeaderData }) {
       }}
     >
       {/* Breadcrumb */}
-      <div className="mb-2 flex items-center gap-2 text-[10px]">
+      <div className="mb-2 flex items-center gap-2 text-[12px]">
         {breadcrumb.map((item, index) => (
           <div key={item.label} className="flex items-center gap-2">
             <span
               className={
-                item.active
-                  ? "font-semibold text-[#1E5BDB]"
-                  : "text-[#7C8AA5]"
+                item.active ? "font-semibold text-[#1E5BDB]" : "text-[#7C8AA5]"
               }
             >
               {item.label}
@@ -41,9 +39,7 @@ export default function IssuesHeader({ issueHeaderData }) {
             {title}
           </h1>
 
-          <p className="mt-2 text-[12px] text-[#73809A]">
-            {subtitle}
-          </p>
+          <p className="mt-2 text-[12px] text-[#73809A]">{subtitle}</p>
         </div>
 
         {/* Right Buttons */}
@@ -51,7 +47,7 @@ export default function IssuesHeader({ issueHeaderData }) {
           <button
             type="button"
             onClick={onBack}
-            className="flex h-[28px] items-center gap-1 rounded-md bg-[#2563EB] px-4 text-[11px] font-semibold text-white"
+            className="flex h-[28px] items-center gap-1 rounded-md bg-[#2563EB] px-4 text-[12px] font-semibold text-white"
           >
             <ChevronsLeft size={12} />
             Back to Issues
@@ -59,7 +55,7 @@ export default function IssuesHeader({ issueHeaderData }) {
 
           <button
             type="button"
-            className="flex h-[28px] items-center gap-1 rounded-md border border-[#7EA6FF] bg-white px-4 text-[11px] font-semibold text-[#2563EB]"
+            className="flex h-[28px] items-center gap-1 rounded-md border border-[#7EA6FF] bg-white px-4 text-[12px] font-semibold text-[#2563EB]"
           >
             <ChevronLeft size={12} />
             Previous
@@ -67,7 +63,7 @@ export default function IssuesHeader({ issueHeaderData }) {
 
           <button
             type="button"
-            className="flex h-[28px] items-center gap-1 rounded-md border border-[#7EA6FF] bg-white px-4 text-[11px] font-semibold text-[#2563EB]"
+            className="flex h-[28px] items-center gap-1 rounded-md border border-[#7EA6FF] bg-white px-4 text-[12px] font-semibold text-[#2563EB]"
           >
             Next
             <ChevronRight size={12} />
