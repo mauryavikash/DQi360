@@ -11,16 +11,16 @@ import {
 } from "lucide-react";
 
 import { submitIssueProposal } from "@/app/lib/api";
-
+import { toast } from "sonner";
 export default function IssuesDetailsCustomer({ issueData }) {
   const [proposedValue, setProposedValue] = useState("");
   const [comment, setComment] = useState("");
   const [submitted, setSubmitted] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   if (!issueData) return null;
 
-  const validationPassed =
-    issueData?.status?.toLowerCase() === "approved";
+  const validationPassed = issueData?.status?.toLowerCase() === "approved";
 
   return (
     <div className="space-y-3">
@@ -48,30 +48,22 @@ export default function IssuesDetailsCustomer({ issueData }) {
               {issueData.rule_id || "-"}
             </dd>
 
-            <dt className="text-slate-500">
-              Rule Description
-            </dt>
+            <dt className="text-slate-500">Rule Description</dt>
             <dd className="text-slate-700">
               {issueData.rule_description || "-"}
             </dd>
 
-            <dt className="text-slate-500">
-              Affected Attribute
-            </dt>
+            <dt className="text-slate-500">Affected Attribute</dt>
             <dd className="text-slate-700 break-words">
               {issueData.field_name || "-"}
             </dd>
 
-            <dt className="text-slate-500">
-              Validation Result
-            </dt>
+            <dt className="text-slate-500">Validation Result</dt>
 
             <dd>
               <span
                 className={`inline-flex items-center gap-1 font-semibold ${
-                  validationPassed
-                    ? "text-green-600"
-                    : "text-red-600"
+                  validationPassed ? "text-green-600" : "text-red-600"
                 }`}
               >
                 <AlertCircle size={12} />
@@ -80,33 +72,24 @@ export default function IssuesDetailsCustomer({ issueData }) {
               </span>
             </dd>
 
-            <dt className="text-slate-500">
-              Source Record
-            </dt>
+            <dt className="text-slate-500">Source Record</dt>
 
             <dd className="text-slate-700">
-              {issueData.source_system || "-"} /
-              {" "}
-              {issueData.customer_id || "-"}
+              {issueData.source_system || "-"} / {issueData.customer_id || "-"}
             </dd>
 
-            <dt className="text-slate-500">Evidence</dt>
+            <dt className="text-slate-500">AI Confidence</dt>
 
             <dd>
               <div className="rounded-md bg-slate-50 p-3 text-slate-700">
-                {issueData.evidence || "-"}
+                {issueData.confidence_score || "-"}
               </div>
             </dd>
 
-            <dt className="text-slate-500">
-              Rule Version
-            </dt>
+            <dt className="text-slate-500">Rule Version</dt>
 
             <dd className="text-slate-700">
-              {issueData.rule_id || "-"}
-              {" "}
-              v
-              {issueData.rule_version || "-"}
+              {issueData.rule_id || "-"} v{issueData.rule_version || "-"}
             </dd>
           </dl>
         </div>
@@ -125,10 +108,7 @@ export default function IssuesDetailsCustomer({ issueData }) {
 
           <div className="rounded-md border border-red-200 bg-red-50 p-3">
             <div className="mb-3 flex items-center gap-2">
-              <AlertCircle
-                size={14}
-                className="text-red-600"
-              />
+              <AlertCircle size={14} className="text-red-600" />
 
               <p className="text-[12px] font-bold text-red-600">
                 Current Value
@@ -136,41 +116,30 @@ export default function IssuesDetailsCustomer({ issueData }) {
             </div>
 
             <dl className="grid grid-cols-[90px_1fr] gap-y-2 text-[12px]">
-              <dt className="text-slate-500">
-                Field
-              </dt>
+              <dt className="text-slate-500">Field</dt>
               <dd>{issueData.field_name || "-"}</dd>
 
-              <dt className="text-slate-500">
-                Current Value
-              </dt>
-              <dd>
-                {issueData.current_value || "-"}
-              </dd>
+              <dt className="text-slate-500">Current Value</dt>
+              <dd>{issueData.current_value || "-"}</dd>
 
-              <dt className="text-slate-500">
-                Status
-              </dt>
+              <dt className="text-slate-500">Status</dt>
 
               <dd className="font-semibold text-red-600">
                 {issueData.status || "-"}
               </dd>
 
-              <dt className="text-slate-500">
-                Source System
-              </dt>
+              <dt className="text-slate-500">Source System</dt>
 
-              <dd>
-                {issueData.source_system || "-"}
-              </dd>
+              <dd>{issueData.source_system || "-"}</dd> 
 
-              <dt className="text-slate-500">
-                Last Updated
-              </dt>
-
-              <dd>
-                {issueData.assigned_date || "-"}
-              </dd>
+              <dt className="text-slate-500">Last Updated</dt>
+              <dd>{issueData.assigned_date || "-"}</dd>
+              <dt className="text-slate-500">Root Cause</dt>
+              <dd>{issueData.root_cause || "-"}</dd>
+              <dt className="text-slate-500">	Business Impact</dt> 
+              <dd>{issueData.business_impact || "-"}</dd>
+              <dt className="text-slate-500">Suggested Owner</dt>
+              <dd>{issueData.suggested_owner || "-"}</dd>
             </dl>
           </div>
 
@@ -179,10 +148,7 @@ export default function IssuesDetailsCustomer({ issueData }) {
           <div className="rounded-md border border-blue-200 bg-blue-50 p-3">
             <div className="mb-3 flex items-center justify-between">
               <div className="flex items-center gap-2">
-                <CheckCircle2
-                  size={14}
-                  className="text-blue-600"
-                />
+                <CheckCircle2 size={14} className="text-blue-600" />
 
                 <p className="text-[12px] font-bold text-blue-600">
                   Proposed Value
@@ -195,53 +161,35 @@ export default function IssuesDetailsCustomer({ issueData }) {
             </div>
 
             <dl className="grid grid-cols-[100px_1fr] gap-y-2 text-[12px]">
-              <dt className="text-slate-500">
-                Field
-              </dt>
+              <dt className="text-slate-500">Field</dt>
               <dd>{issueData.field_name || "-"}</dd>
 
-              <dt className="text-slate-500">
-                Proposed Value
-              </dt>
+              <dt className="text-slate-500">Proposed Value</dt>
 
               <dd>
                 <input
-                  value={
-                    proposedValue ||
-                    issueData.proposed_value ||
-                    ""
-                  }
-                  onChange={(e) =>
-                    setProposedValue(e.target.value)
-                  }
+                  value={proposedValue || issueData.proposed_value || ""}
+                  onChange={(e) => setProposedValue(e.target.value)}
                   className="h-7 w-full rounded border border-blue-200 px-2"
                   placeholder="Enter corrected value"
                 />
               </dd>
 
-              <dt className="text-slate-500">
-                Recommendation
-              </dt>
+              <dt className="text-slate-500 break-words">Recommendation</dt>
 
               <dd className="text-green-600 font-medium">
                 {issueData.recommendation || "-"}
               </dd>
 
-              <dt className="text-slate-500">
-                Evidence Status
-              </dt>
+              <dt className="text-slate-500">Evidence Status</dt>
 
               <dd className="text-amber-600 font-medium">
                 {issueData.evidence || "-"}
               </dd>
 
-              <dt className="text-slate-500">
-                Source
-              </dt>
+              <dt className="text-slate-500">Source</dt>
 
-              <dd>
-                {issueData.source_system || "-"}
-              </dd>
+              <dd>{issueData.source_system || "-"}</dd>
             </dl>
           </div>
         </div>
@@ -250,154 +198,146 @@ export default function IssuesDetailsCustomer({ issueData }) {
       {/* Proposal */}
 
       <section className="rounded-[10px] bg-white p-4 shadow-sm">
-  <h2 className="flex items-center gap-2 text-[12px] font-bold text-[#22345B]">
-    <FileText size={13} className="text-blue-600" />
-    Remediation Proposal
-  </h2>
+        <h2 className="flex items-center gap-2 text-[12px] font-bold text-[#22345B]">
+          <FileText size={13} className="text-blue-600" />
+          Remediation Proposal
+        </h2>
 
-  <div className="mt-4 grid gap-4 lg:grid-cols-2">
-    {/* Proposed Value */}
+        <div className="mt-4 grid gap-4 lg:grid-cols-2">
+          {/* Proposed Value */}
 
-    <div>
-      <label className="mb-1 block text-[12px] font-semibold text-slate-600">
-        Proposed Value *
-      </label>
+          <div>
+            <label className="mb-1 block text-[12px] font-semibold text-slate-600">
+              Proposed Value *
+            </label>
 
-      <input
-        value={
-          proposedValue ||
-          issueData.proposed_value ||
-          ""
-        }
-        onChange={(e) =>
-          setProposedValue(e.target.value)
-        }
-        className="h-9 w-full rounded-md border border-slate-300 px-3 text-[12px]"
-        placeholder="Enter corrected value"
-      />
-    </div>
+            <input
+              value={proposedValue || issueData.proposed_value || ""}
+              onChange={(e) => setProposedValue(e.target.value)}
+              className="h-9 w-full rounded-md border border-slate-300 px-3 text-[12px]"
+              placeholder="Enter corrected value"
+            />
+          </div>
 
-    {/* Remediation Rationale */}
+          {/* Remediation Rationale */}
 
-    <div>
-      <label className="mb-1 block text-[12px] font-semibold text-slate-600">
-        Remediation Rationale *
-      </label>
+          <div>
+            <label className="mb-1 block text-[12px] font-semibold text-slate-600">
+              Remediation Rationale *
+            </label>
 
-      <textarea
-        value={comment}
-        onChange={(e) => setComment(e.target.value)}
-        className="h-[38px] w-full resize-none rounded-md border border-slate-300 p-2 text-[12px]"
-        placeholder="Provide remediation rationale"
-      />
-    </div>
-  </div>
+            <textarea
+              value={comment}
+              onChange={(e) => setComment(e.target.value)}
+              className="h-[38px] w-full resize-none rounded-md border border-slate-300 p-2 text-[12px]"
+              placeholder="Provide remediation rationale"
+            />
+          </div>
+        </div>
 
-  {/* Supporting Evidence */}
+        {/* Supporting Evidence */}
 
-  <div className="mt-4">
-    <label className="mb-1 block text-[12px] font-semibold text-slate-600">
-      Supporting Evidence
-    </label>
+        <div className="mt-4">
+          <label className="mb-1 block text-[12px] font-semibold text-slate-600">
+            Supporting Evidence
+          </label>
 
-    <div className="flex items-center gap-2">
-      <label className="flex cursor-pointer items-center gap-2 rounded border border-slate-300 bg-slate-50 px-3 py-2 text-[12px]">
-        <Upload size={14} />
+          <div className="flex items-center gap-2">
+            <label className="flex cursor-pointer items-center gap-2 rounded border border-slate-300 bg-slate-50 px-3 py-2 text-[12px]">
+              <Upload size={14} />
+              Upload Document
+              <input type="file" className="hidden" />
+            </label>
+          </div>
 
-        Upload Document
+          <p className="mt-1 text-[12px] text-slate-400">
+            Upload relevant document (tax certificate, registration document
+            etc.)
+          </p>
+        </div>
 
-        <input
-          type="file"
-          className="hidden"
-        />
-      </label>
-    </div>
+        {/* Optional Comment */}
 
-    <p className="mt-1 text-[12px] text-slate-400">
-      Upload relevant document
-      (tax certificate, registration document etc.)
-    </p>
-  </div>
+        <div className="mt-4">
+          <label className="mb-1 block text-[12px] font-semibold text-slate-600">
+            Comment (Optional)
+          </label>
 
-  {/* Optional Comment */}
+          <textarea
+            className="h-[42px] w-full resize-none rounded-md border border-slate-300 p-2 text-[12px]"
+            placeholder="Additional comments"
+          />
+        </div>
 
-  <div className="mt-4">
-    <label className="mb-1 block text-[12px] font-semibold text-slate-600">
-      Comment (Optional)
-    </label>
+        {/* Action Buttons */}
 
-    <textarea
-      className="h-[42px] w-full resize-none rounded-md border border-slate-300 p-2 text-[12px]"
-      placeholder="Additional comments"
-    />
-  </div>
+        <div className="mt-5 flex flex-wrap items-center gap-3">
+          <button
+            onClick={async () => {
+              const toastId = toast.loading("Submitting proposal...");
 
-  {/* Action Buttons */}
+              try {
+                setIsSubmitting(true);
 
-  <div className="mt-5 flex flex-wrap items-center gap-3">
-    <button
-      onClick={async () => {
-        try {
-          const response =
-            await submitIssueProposal(
-              issueData.issue_id,
-              {
-                proposed_value:
-                  proposedValue,
-                comment,
-                performed_by:
-                  localStorage.getItem(
-                    "userName"
-                  ) || "System User",
+                await submitIssueProposal(issueData.issue_id, {
+                  proposed_value: proposedValue,
+                  comment,
+                  performed_by:
+                    localStorage.getItem("userName") || "System User",
+                });
+
+                toast.success("Proposal submitted successfully", {
+                  id: toastId,
+                });
+
+                setSubmitted(true);
+
+                setProposedValue("");
+                setComment("");
+              } catch (error) {
+                toast.error(
+                  error?.response?.data?.message || "Failed to submit proposal",
+                  {
+                    id: toastId,
+                  },
+                );
+              } finally {
+                setIsSubmitting(false);
               }
-            );
+            }}
+            disabled={!proposedValue || submitted || isSubmitting}
+            className="rounded-md bg-[#1565F9] px-4 py-2 text-[12px] font-semibold text-white disabled:cursor-not-allowed disabled:bg-slate-300"
+          >
+            {isSubmitting
+              ? "Submitting..."
+              : submitted
+                ? "Submitted"
+                : "Submit Proposal"}
+          </button>
+          <button className="rounded-md border border-[#1565F9] px-4 py-2 text-[12px] font-semibold text-[#1565F9]">
+            Save Draft
+          </button>
 
-          setSubmitted(true);
+          <button
+            onClick={() => {
+              setProposedValue("");
+              setComment("");
+              setSubmitted(false);
+            }}
+            className="rounded-md border border-slate-300 px-4 py-2 text-[12px] font-semibold"
+          >
+            Cancel
+          </button>
 
-          setProposedValue(
-            response?.proposed_value ||
-              proposedValue
-          );
-        } catch (error) {
-          console.error(
-            "Proposal submit failed",
-            error
-          );
-        }
-      }}
-      disabled={!proposedValue}
-      className="rounded-md bg-[#1565F9] px-4 py-2 text-[12px] font-semibold text-white"
-    >
-      Submit Proposal
-    </button>
+          <div className="flex-1 rounded-md bg-[#EAF2FF] p-2 text-[12px] text-slate-500">
+            Submitting records the proposal and audit event. It does not update
+            the source system.
+          </div>
+        </div>
 
-    <button
-      className="rounded-md border border-[#1565F9] px-4 py-2 text-[12px] font-semibold text-[#1565F9]"
-    >
-      Save Draft
-    </button>
+        {/* Display returned values */}
 
-    <button
-      onClick={() => {
-        setProposedValue("");
-        setComment("");
-        setSubmitted(false);
-      }}
-      className="rounded-md border border-slate-300 px-4 py-2 text-[12px] font-semibold"
-    >
-      Cancel
-    </button>
-
-    <div className="flex-1 rounded-md bg-[#EAF2FF] p-2 text-[12px] text-slate-500">
-      Submitting records the proposal and
-      audit event. It does not update the
-      source system.
-    </div>
-  </div>
-
-  {/* Display returned values */}
-
-  {submitted && (
+        {/* {submitted && (
     <div className="mt-4 rounded-md border border-green-200 bg-green-50 p-3">
       <h3 className="mb-2 text-[12px] font-semibold text-green-700">
         Proposed Fix
@@ -438,8 +378,8 @@ export default function IssuesDetailsCustomer({ issueData }) {
         </div>
       </div>
     </div>
-  )}
-</section>
+  )} */}
+      </section>
     </div>
   );
 }
