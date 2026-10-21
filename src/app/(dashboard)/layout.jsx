@@ -3,7 +3,6 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-
 import Footer from "../../components/layout/footer";
 import Header from "../../components/layout/header";
 import Sidebar from "../../components/layout/sidebar";
