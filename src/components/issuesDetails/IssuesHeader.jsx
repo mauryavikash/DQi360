@@ -8,10 +8,6 @@ export default function IssuesHeader({ issueHeaderData }) {
   return (
     <section
       className="rounded-md"
-      // style={{
-      //   background:
-      //     "linear-gradient(90deg,#E5F3F5 0%,#E8F3F7 45%,#DDE7FA 100%)",
-      // }}
     >
       {/* Breadcrumb */}
       <div className="mb-2 flex items-center gap-2 text-[12px]">
