@@ -335,50 +335,6 @@ export default function IssuesDetailsCustomer({ issueData }) {
           </div>
         </div>
 
-        {/* Display returned values */}
-
-        {/* {submitted && (
-    <div className="mt-4 rounded-md border border-green-200 bg-green-50 p-3">
-      <h3 className="mb-2 text-[12px] font-semibold text-green-700">
-        Proposed Fix
-      </h3>
-
-      <div className="grid grid-cols-3 gap-3 text-[12px]">
-        <div>
-          <div className="text-slate-500">
-            Proposed Value
-          </div>
-
-          <div className="font-semibold">
-            {issueData.proposed_value ||
-              proposedValue}
-          </div>
-        </div>
-
-        <div>
-          <div className="text-slate-500">
-            Proposed By
-          </div>
-
-          <div className="font-semibold">
-            {issueData.proposed_by ||
-              "-"}
-          </div>
-        </div>
-
-        <div>
-          <div className="text-slate-500">
-            Proposed At
-          </div>
-
-          <div className="font-semibold">
-            {issueData.proposed_at ||
-              "-"}
-          </div>
-        </div>
-      </div>
-    </div>
-  )} */}
       </section>
     </div>
   );
