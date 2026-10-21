@@ -7,8 +7,6 @@ import {
   ChevronDown,
   MoreVertical,
   TriangleAlert,
-  ChevronLeft,
-  ChevronRight,
 } from "lucide-react";
 
 export default function MyTaskTable({ tasks = [], onOpenTask }) {
