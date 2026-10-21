@@ -25,16 +25,16 @@ const SEVERITY_ORDER = {
 
 function SelectFilter({ value, onChange, options, label }) {
   return (
-    <div className="flex h-[32px] items-center rounded-md border border-[#D9E1EF] bg-white px-2">
-      <span className="mr-2 whitespace-nowrap text-[9px] text-[#667085]">
+    <div className="flex h-[32px] items-center justify-between rounded-md border border-[#D9E1EF] bg-white px-3">
+      <span className="whitespace-nowrap text-[12px] text-[#667085]">
         {label}
       </span>
 
-      <div className="relative">
+      <div className="relative border border-[#D9E1EF] m-1 p-1 rounded flex items-center">
         <select
           value={value}
           onChange={(event) => onChange(event.target.value)}
-          className="cursor-pointer appearance-none bg-transparent pr-5 text-[10px] text-[#344054] outline-none"
+          className="min-w-[52px] cursor-pointer appearance-none bg-transparent pr-2 pl-2 text-[10px] font-medium text-[#344054] outline-none"
         >
           <option value="All">All</option>
           {options.filter(Boolean).map((item) => (
@@ -258,7 +258,7 @@ export default function IssuesTable({ data = [], filters = {}, onReview }) {
       {/* Filters */}
 
       {showFilters && (
-        <div className="mt-6 flex flex-wrap items-center gap-3">
+        <div className="mt-6 flex flex-wrap items-start gap-3">
           <SelectFilter
             label="Severity"
             value={severity}
@@ -286,15 +286,7 @@ export default function IssuesTable({ data = [], filters = {}, onReview }) {
             onChange={setStatus}
             options={statusOptions}
           />
-
-          <SelectFilter
-            label="Owner"
-            value={owner}
-            onChange={setOwner}
-            options={ownerOptions}
-          />
-
-          {countryOptions.length > 0 && (
+{countryOptions.length > 0 && (
             <SelectFilter
               label="Country / Region"
               value={country}
@@ -302,6 +294,12 @@ export default function IssuesTable({ data = [], filters = {}, onReview }) {
               options={countryOptions}
             />
           )}
+          <SelectFilter
+            label="Owner"
+            value={owner}
+            onChange={setOwner}
+            options={ownerOptions}
+          />
 
           <button
             onClick={handleClearAll}
@@ -338,19 +336,19 @@ export default function IssuesTable({ data = [], filters = {}, onReview }) {
           <table className="w-full">
             <thead>
               <tr className="bg-[#F9FAFB] text-[#667085] text-[12px] font-medium border-t border-[#EAECF0]">
-                <th className="text-left px-2 py-3">Issue ID</th>
-                <th className="text-left px-4 py-4">Customer ID</th>
-                <th className="text-left px-4 py-4">Customer Name</th>
-                <th className="text-left px-4 py-4">Issue Category</th>
-                <th className="text-left px-4 py-4">DQ Rule</th>
-                <th className="text-left px-4 py-4">Severity</th>
-                <th className="text-left px-4 py-4">DQ Score</th>
-                <th className="text-left px-4 py-4">Source System</th>
-                <th className="text-left px-4 py-4">Assign To</th>
-                <th className="text-left px-4 py-4">Status</th>
-                <th className="text-left px-4 py-4">Age</th>
-                <th className="text-left px-4 py-4">Detected Date</th>
-                <th className="text-left px-4 py-4">Action</th>
+                <th className="text-left p-2">Issue ID</th>
+                <th className="text-left p-2">Customer ID</th>
+                <th className="text-left p-2">Customer Name</th>
+                <th className="text-left p-2">Issue Category</th>
+                <th className="text-left p-2">DQ Rule</th>
+                <th className="text-left p-2">Severity</th>
+                <th className="text-left p-2">DQ Score</th>
+                <th className="text-left p-2">Source System</th>
+                <th className="text-left p-2">Assign To</th>
+                <th className="text-left p-2">Status</th>
+                <th className="text-left p-2">Age</th>
+                <th className="text-left p-2">Detected Date</th>
+                <th className="text-left p-2">Action</th>
                 <th />
               </tr>
             </thead>
@@ -361,46 +359,46 @@ export default function IssuesTable({ data = [], filters = {}, onReview }) {
                   key={item.issueId}
                   className="border-t border-[#EAECF0] text-[12px] text-[#475467]"
                 >
-                  <td className="px-2 py-3 text-[#1565F9]">{item.issueId}</td>
-
-                  <td className="px-4 py-4">{item.customerId}</td>
-
-                  <td className="px-4 py-4 max-w-[180px]">
-                    {item.customerName}
+                  <td className="p-2 max-w-[60px] text-[#1565F9]">
+                    {item.issueId}
                   </td>
 
-                  <td className="px-4 py-4">{item.category}</td>
+                  <td className="p-2">{item.customerId}</td>
 
-                  <td className="px-4 py-4 max-w-[180px]">{item.rule}</td>
+                  <td className="p-2 max-w-[120px]">{item.customerName}</td>
 
-                  <td className="px-4 py-4">
+                  <td className="p-2">{item.category}</td>
+
+                  <td className="p-2 max-w-[550px]">{item.rule}</td>
+
+                  <td className="p-2">
                     <span
-                      className={`inline-flex items-center gap-1 px-3 py-1 rounded-lg text-[12px] font-semibold ${severityColors[item.severity]}`}
+                      className={`inline-flex items-center gap-1 p-2 rounded-lg text-[12px] font-semibold ${severityColors[item.severity]}`}
                     >
                       <AlertTriangle size={12} />
                       {item.severity}
                     </span>
                   </td>
 
-                  <td className="px-4 py-4">{item.dqScore}</td>
+                  <td className="p-2">{item.dqScore}</td>
 
-                  <td className="px-4 py-4">{item.sourceSystem}</td>
+                  <td className="p-2">{item.sourceSystem}</td>
 
-                  <td className="px-4 py-4">{item.assignee}</td>
+                  <td className="p-2">{item.assignee}</td>
 
-                  <td className="px-4 py-4">
+                  <td className="p-2">
                     <span
-                      className={`inline-flex items-center justify-center min-w-[90px] px-3 py-1 rounded-lg text-[12px] font-semibold ${statusColors[item.status]}`}
+                      className={`inline-flex items-center justify-center min-w-[90px] p-2rounded-lg text-[12px] font-semibold ${statusColors[item.status]}`}
                     >
                       {item.status}
                     </span>
                   </td>
 
-                  <td className="px-4 py-4">{item.age}</td>
+                  <td className="p-2">{item.age}</td>
 
-                  <td className="px-4 py-4">{item.detectedDate}</td>
+                  <td className="p-2">{item.detectedDate}</td>
 
-                  <td className="px-4 py-4">
+                  <td className="p-2">
                     <button
                       onClick={() => onReview(item)}
                       className="h-[24px] min-w-[62px] rounded-md border border-[#3B82F6] text-[12px] font-semibold text-[#155EEF] hover:bg-blue-50"
@@ -409,7 +407,7 @@ export default function IssuesTable({ data = [], filters = {}, onReview }) {
                     </button>
                   </td>
 
-                  <td className="px-4 py-4">
+                  <td className="p-2">
                     <button
                       onClick={() => {
                         setAssignName("");
@@ -537,19 +535,15 @@ export default function IssuesTable({ data = [], filters = {}, onReview }) {
                 disabled={!assignName.trim() || isSaving}
                 onClick={async () => {
                   setIsSaving(true);
-
                   const toastId = toast.loading("Saving...");
-
                   try {
                     await assignIssue(selectedIssueId, {
                       assigned_to: assignName,
                       status: assignStatus,
                     });
-
                     toast.success("Action completed successfully", {
                       id: toastId,
                     });
-
                     setShowAssignPopup(false);
                     setAssignName("");
                     setAssignStatus("In Progress");
@@ -560,7 +554,6 @@ export default function IssuesTable({ data = [], filters = {}, onReview }) {
                         id: toastId,
                       },
                     );
-
                     setIsSaving(false);
                   }
                 }}

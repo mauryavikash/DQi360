@@ -124,13 +124,13 @@ export default function MyTaskTable({ tasks = [], onOpenTask }) {
                 setCurrentPage(1);
               }}
               placeholder="Search customer or issue id..."
-              className="h-[46px] w-full rounded-[14px] border border-[#D9E0EB] bg-white pl-12 pr-4 text-[12px] outline-none"
+              className="h-[36px] w-full rounded-[14px] border border-[#D9E0EB] bg-white pl-12 pr-4 text-[12px] outline-none"
             />
           </div>
 
           <button
             onClick={() => setShowFilters((prev) => !prev)}
-            className="flex h-[44px] items-center gap-2 rounded-[14px] bg-[#0B63F6] px-5 text-[12px] font-semibold text-white"
+            className="flex h-[36px] items-center gap-2 rounded-[14px] bg-[#0B63F6] px-5 text-[12px] font-semibold text-white"
           >
             <Filter size={16} />
             Filters
@@ -150,7 +150,7 @@ export default function MyTaskTable({ tasks = [], onOpenTask }) {
             {filterControls.map(([label, value, onChange, options]) => (
               <div
                 key={label}
-                className="flex items-center gap-3 rounded-xl border bg-slate-50 px-3 py-2"
+                className="flex items-center gap-3 rounded-xl border border-[#D9E0EB] bg-slate-50 px-3 py-2"
               >
                 <span className="text-xs text-slate-500">{label}</span>
 
@@ -160,7 +160,7 @@ export default function MyTaskTable({ tasks = [], onOpenTask }) {
                     onChange(e.target.value);
                     setCurrentPage(1);
                   }}
-                  className="rounded border px-2 py-1 text-xs"
+                  className="rounded border border-[#D9E0EB]  px-2 py-1 text-xs"
                 >
                   <option value="All">All</option>
 
@@ -176,57 +176,57 @@ export default function MyTaskTable({ tasks = [], onOpenTask }) {
         )}
       </section>
 
-      <section className="mt-6 overflow-hidden rounded-[24px] border border-[#D9E0EB] bg-white shadow-sm">
+      <section className="mt-6 overflow-hidden rounded-[20px] border border-[#D9E0EB] bg-white shadow-sm">
         <div className="border-b border-[#E5EAF2] bg-white px-6 py-5">
-          <h3 className="text-[28px] font-bold text-[#24324B]">
+          <h3 className="text-[16px] font-bold text-[#24324B]">
             {filteredData.length} Tasks
           </h3>
         </div>
 
         <div className="overflow-x-auto">
-          <table className="w-full min-w-[1450px]">
+          <table className="w-full text-[12px] min-w-[1450px]">
             <thead>
               <tr className="border-b border-[#E5EAF2] bg-[#F8FAFC] text-left">
-                <th className="px-5 py-4 text-[14px] font-semibold text-[#24324B]">
+                <th className="p-2 text-[12px] font-semibold text-[#24324B]">
                   Severity
                 </th>
 
-                <th className="px-5 py-4 text-[14px] font-semibold text-[#24324B]">
+                <th className="p-2 text-[12px] font-semibold text-[#24324B]">
                   Issue ID
                 </th>
 
-                <th className="px-5 py-4 text-[14px] font-semibold text-[#24324B]">
+                <th className="p-2 text-[12px] font-semibold text-[#24324B]">
                   Customer
                 </th>
 
-                <th className="px-5 py-4 text-[14px] font-semibold text-[#24324B]">
+                <th className="p-2 text-[12px] font-semibold text-[#24324B]">
                   Why this needs attention
                 </th>
 
-                <th className="px-5 py-4 text-[14px] font-semibold text-[#24324B]">
+                <th className="p-2 text-[12px] font-semibold text-[#24324B]">
                   Issue Type
                 </th>
 
-                <th className="px-5 py-4 text-[14px] font-semibold text-[#24324B]">
+                <th className="p-2 text-[12px] font-semibold text-[#24324B]">
                   Source System
                 </th>
 
-                <th className="px-5 py-4 text-[14px] font-semibold text-[#24324B]">
+                <th className="p-2 text-[12px] font-semibold text-[#24324B]">
                   Assigned Date
                 </th>
-                <th className="px-5 py-4 text-[14px] font-semibold text-[#24324B]">
+                <th className="p-2 text-[12px] font-semibold text-[#24324B]">
                   Assigned To
                 </th>
 
-                <th className="px-5 py-4 text-[14px] font-semibold text-[#24324B]">
+                <th className="p-2 text-[12px] font-semibold text-[#24324B]">
                   Age
                 </th>
 
-                <th className="px-5 py-4 text-[14px] font-semibold text-[#24324B]">
+                <th className="p-2 text-[12px] font-semibold text-[#24324B]">
                   Status
                 </th>
 
-                <th className="px-5 py-4 text-[14px] font-semibold text-[#24324B]">
+                <th className="p-2 text-[12px] font-semibold text-[#24324B]">
                   Action
                 </th>
 
@@ -240,7 +240,7 @@ export default function MyTaskTable({ tasks = [], onOpenTask }) {
                   key={row.issue_id}
                   className="border-b border-[#E5EAF2] hover:bg-[#FAFBFC]"
                 >
-                  <td className="px-5 py-5">
+                  <td className="p-2">
                     <span
                       className={`inline-flex items-center gap-1 rounded-full px-3 py-1 text-xs font-semibold ${getSeverityStyle(
                         row.severity,
@@ -251,32 +251,32 @@ export default function MyTaskTable({ tasks = [], onOpenTask }) {
                     </span>
                   </td>
 
-                  <td className="px-5 py-5 font-semibold text-[#0B63F6]">
+                  <td className="p-2 font-semibold text-[#0B63F6]">
                     {row.issue_id}
                   </td>
 
-                  <td className="px-5 py-5 text-[#24324B]">
+                  <td className="p-2 text-[#24324B]">
                     {row.customer_name}
                   </td>
 
-                  <td className="max-w-[350px] px-5 py-5">
+                  <td className="max-w-[250px] p-2">
                     <div className="line-clamp-2 text-[#555]">{row.why}</div>
                   </td>
 
-                  <td className="px-5 py-5">{row.issue_type}</td>
+                  <td className="p-2">{row.issue_type}</td>
 
-                  <td className="px-5 py-5">{row.source_system}</td>
+                  <td className="p-2">{row.source_system}</td>
 
-                  <td className="px-5 py-5">{row.assigned_date}</td>
-                  <td className="px-5 py-5">{row.assigned_to}</td>
+                  <td className="p-2">{row.assigned_date}</td>
+                  <td className="p-2">{row.assigned_to}</td>
 
-                  <td className="px-5 py-5">{row.age_days ?? 0}d</td>
+                  <td className="p-2">{row.age_days ?? 0}d</td>
 
-                  <td className="px-5 py-5">
+                  <td className="p-2">
                     <span
                       className="
                   inline-flex
-                  min-w-[120px]
+                  min-w-[80px]
                   justify-center
                   rounded-lg
                   bg-blue-100
@@ -291,7 +291,7 @@ export default function MyTaskTable({ tasks = [], onOpenTask }) {
                     </span>
                   </td>
 
-                  <td className="px-5 py-5">
+                  <td className="p-2">
                     <button
                       onClick={() =>
                         onOpenTask?.(
@@ -302,13 +302,13 @@ export default function MyTaskTable({ tasks = [], onOpenTask }) {
                         )
                       }
                       className="
-                  h-[46px]
-                  min-w-[140px]
+                  h-[36px]
+                  min-w-[80px]
                   rounded-xl
                   border
                   border-[#0B63F6]
                   bg-white
-                  text-[16px]
+                  text-[12px]
                   font-semibold
                   text-[#0B63F6]
                 "
