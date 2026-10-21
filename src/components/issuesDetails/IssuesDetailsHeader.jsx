@@ -8,15 +8,15 @@ export default function IssuesDetailsHeader({ issueDetailData }) {
       High: "bg-red-100 text-red-600",
       Medium: "bg-amber-100 text-amber-700",
       Low: "bg-blue-50 text-blue-600",
-   }[issueDetailData?.severity] ?? "bg-red-100 text-red-600";
+    }[issueDetailData?.severity] ?? "bg-red-100 text-red-600";
 
   return (
     <section className="mt-3 rounded-[10px] border border-[#2F6FEB] bg-white px-4 py-3 shadow-sm">
       <div className="grid grid-cols-2 gap-x-4 gap-y-3 md:grid-cols-5 lg:grid-cols-10">
         {[
-  ["Issue ID", issueDetailData.issue_id],
-  ["Customer ID", issueDetailData.customer_id],
-  ["Customer Name", issueDetailData.customer_name],
+          ["Issue ID", issueDetailData.issue_id],
+          ["Customer ID", issueDetailData.customer_id],
+          ["Customer Name", issueDetailData.customer_name],
           [
             "Severity",
             <span
@@ -28,19 +28,19 @@ export default function IssuesDetailsHeader({ issueDetailData }) {
             </span>,
           ],
           ["Issue Category", issueDetailData.issue_category],
-["DQ Score", issueDetailData.dq_score],
-["Source System", issueDetailData.source_system],
-["Owner", issueDetailData.owner],
+          ["DQ Score", issueDetailData.dq_score],
+          ["Source System", issueDetailData.source_system],
+          ["Owner", issueDetailData.owner],
           [
             "Status",
             <span
               key="status"
               className="rounded bg-blue-50 px-2 py-0.5 text-blue-600"
             >
-             {issueDetailData?.status}
+              {issueDetailData?.status}
             </span>,
           ],
-         ["Age", `${issueDetailData?.age_days || 0}d`],
+          ["Age", `${issueDetailData?.age_days || 0}d`],
         ].map(([label, value]) => (
           <div key={label} className="min-w-0">
             <p className="text-[8px] text-slate-400">{label}</p>

@@ -130,7 +130,7 @@ export default function IssuesCustomerContext({ issueData }) {
 
           {/* Recent Documents */}
 
-          <div className="grid grid-cols-[110px_1fr] gap-2">
+          {/* <div className="grid grid-cols-[110px_1fr] gap-2">
             <dt className="text-slate-400">
               Recent Documents
             </dt>
@@ -165,88 +165,109 @@ export default function IssuesCustomerContext({ issueData }) {
                 </button>
               </div>
             </dd>
-          </div>
+          </div> */}
         </dl>
       </section>
 
       {/* Documents Popup */}
 
-      {showDocuments && (
-        <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/40">
-          <div className="w-[700px] rounded-xl bg-white p-5 shadow-xl">
-            <div className="flex items-center justify-between">
-              <h2 className="text-[12px] font-bold text-[#22345B]">
-                Customer Documents
-              </h2>
+     {/* Customer Context Popup */}
+{showDocuments && (
+  <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/40">
+    <div className="w-[700px] rounded-xl bg-white p-5 shadow-xl">
+      <div className="flex items-center justify-between border-b pb-3">
+        <h2 className="text-[14px] font-bold text-[#22345B]">
+          Customer Context Details
+        </h2>
 
-              <button
-                type="button"
-                onClick={() => setShowDocuments(false)}
-              >
-                <X size={18} />
-              </button>
-            </div>
+        <button
+          type="button"
+          onClick={() => setShowDocuments(false)}
+        >
+          <X size={18} />
+        </button>
+      </div>
 
-            <div className="mt-4 overflow-hidden rounded-lg border">
-              <table className="w-full">
-                <thead>
-                  <tr className="bg-slate-50">
-                    <th className="px-3 py-2 text-left text-[12px]">
-                      Document Name
-                    </th>
+      <div className="mt-4 max-h-[70vh] overflow-y-auto">
+        <div className="grid grid-cols-[180px_1fr] gap-y-3 gap-x-4 text-[13px]">
+          <div className="text-slate-500">Customer ID</div>
+          <div className="font-medium text-slate-700">
+            {issueData?.customer_id || "-"}
+          </div>
 
-                    <th className="px-3 py-2 text-left text-[12px]">
-                      Type
-                    </th>
-                  </tr>
-                </thead>
+          <div className="text-slate-500">Customer Name</div>
+          <div className="font-medium text-slate-700">
+            {issueData?.customer_name || "-"}
+          </div>
 
-                <tbody>
-                  {allDocuments.length > 0 ? (
-                    allDocuments.map((doc, index) => (
-                      <tr
-                        key={index}
-                        className="border-t"
-                      >
-                        <td className="px-3 py-2 text-[12px]">
-                          {doc?.document_name ||
-                            doc?.name ||
-                            "-"}
-                        </td>
+          <div className="text-slate-500">Country / Region</div>
+          <div className="font-medium text-slate-700">
+            {issueData?.COUNTRY_NAME
+              ? `${issueData.COUNTRY_NAME}${
+                  issueData?.country_code
+                    ? ` (${issueData.country_code})`
+                    : ""
+                }`
+              : "-"}
+          </div>
 
-                        <td className="px-3 py-2 text-[12px]">
-                          {doc?.document_type ||
-                            doc?.type ||
-                            "-"}
-                        </td>
-                      </tr>
-                    ))
-                  ) : (
-                    <tr>
-                      <td
-                        colSpan={2}
-                        className="px-3 py-6 text-center text-[12px] text-slate-500"
-                      >
-                        No documents available
-                      </td>
-                    </tr>
-                  )}
-                </tbody>
-              </table>
-            </div>
+          <div className="text-slate-500">Customer Type</div>
+          <div className="font-medium text-slate-700">
+            {issueData?.CUSTOMER_TYPE || "-"}
+          </div>
 
-            <div className="mt-4 flex justify-end">
-              <button
-                type="button"
-                onClick={() => setShowDocuments(false)}
-                className="rounded border px-3 py-1 text-[12px]"
-              >
-                Close
-              </button>
-            </div>
+          <div className="text-slate-500">Customer Segment</div>
+          <div className="font-medium text-slate-700">
+            {issueData?.CUSTOMER_SEGMENT || "-"}
+          </div>
+
+          <div className="text-slate-500">Sales Organisation</div>
+          <div className="font-medium text-slate-700">
+            {issueData?.SALES_ORGANISATION || "-"}
+          </div>
+
+          <div className="text-slate-500">Credit Control Area</div>
+          <div className="font-medium text-slate-700">
+            {issueData?.CREDIT_CONTROL_AREA || "-"}
+          </div>
+
+          <div className="text-slate-500">Email</div>
+          <div className="font-medium break-all text-slate-700">
+            {issueData?.EMAIL_ADDRESS || "-"}
+          </div>
+
+          <div className="text-slate-500">Phone</div>
+          <div className="font-medium text-slate-700">
+            {issueData?.PHONE_NUMBER || "-"}
+          </div>
+
+          <div className="text-slate-500">Address</div>
+          <div className="font-medium text-slate-700">
+            {[
+              issueData?.STREET,
+              issueData?.CITY,
+              issueData?.POSTAL_CODE,
+            ]
+              .filter(Boolean)
+              .join(", ") || "-"}
           </div>
         </div>
-      )}
+
+        
+      </div>
+
+      <div className="mt-5 flex justify-end">
+        <button
+          type="button"
+          onClick={() => setShowDocuments(false)}
+          className="rounded-md border border-[#D0D5DD] px-4 py-2 text-[12px] font-medium"
+        >
+          Close
+        </button>
+      </div>
+    </div>
+  </div>
+)}
     </>
   );
 }
