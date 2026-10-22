@@ -43,9 +43,8 @@ export default function DQi360Header() {
           )}
 
           <h1 className="mt-1 text-[20px] font-bold leading-tight text-[#22345b]">
-            Customer Data Quality Workspace
+           Customer Master Data Quality Dashboard
           </h1>
-
           <p className="mt-1 text-[10px] text-[#6c7a90]">
             Enterprise view of customer master data quality across all
             sources.
