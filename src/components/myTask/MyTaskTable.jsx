@@ -184,7 +184,7 @@ export default function MyTaskTable({ tasks = [], onOpenTask }) {
         </div>
 
         <div className="overflow-x-auto">
-          <table className="w-full text-[12px] min-w-[1450px]">
+          <table className="w-full table-auto text-[12px]">
             <thead>
               <tr className="border-b border-[#E5EAF2] bg-[#F8FAFC] text-left">
                 <th className="p-2 text-[12px] font-semibold text-[#24324B]">
@@ -280,10 +280,10 @@ export default function MyTaskTable({ tasks = [], onOpenTask }) {
                   justify-center
                   rounded-lg
                   bg-blue-100
-                  px-3
+                  px-2
+                  whitespace-nowrap
                   py-1.5
                   text-sm
-                  font-semibold
                   text-blue-700
                 "
                     >

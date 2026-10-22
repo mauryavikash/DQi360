@@ -1,5 +1,5 @@
 "use client";
-
+import { RefreshCw } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import IssuesTable from "@/components/issues/IssuesTable";
 import IssuesHeader from "@/components/issuesDetails/IssuesHeader";
@@ -7,7 +7,6 @@ import IssuesDetailsCustomer from "@/components/issuesDetails/IssuesDetailsCusto
 import IssuesDetailsHeader from "@/components/issuesDetails/IssuesDetailsHeader";
 import IssuesCustomerContext from "@/components/issuesDetails/IssuesCustomerContext";
 import IssuesActivity from "@/components/issuesDetails/IssuesActivity";
-
 import { LoadingState } from "@/components/common/LoadingState";
 import { EmptyState } from "@/components/common/EmptyState";
 import { getIssues, getIssueDetails } from "@/app/lib/api";
@@ -126,6 +125,7 @@ export default function IssuesPage() {
     );
   }
 
+
   return (
     <main
       className="min-h-full text-slate-700"
@@ -143,6 +143,15 @@ export default function IssuesPage() {
               {issuesData.length.toLocaleString()} open deterministic DQ-rule
               findings
             </p>
+          </div>
+          <div>
+            <button
+              onClick={() => window.location.reload()}
+              className="flex items-center text-[12px] gap-2 rounded-md bg-[#1565F9] px-2 py-2 text-white"
+            >
+              <RefreshCw className="h-4 w-4" />
+              Refresh
+            </button>
           </div>
         </header>
         {!showDetails ? (
