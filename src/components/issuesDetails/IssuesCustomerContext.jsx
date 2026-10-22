@@ -16,10 +16,10 @@ export default function IssuesCustomerContext({ issueData }) {
   const recentDocuments =
     issueData?.recent_documents || [];
 
-  const allDocuments = [
-    ...existingDocuments,
-    ...recentDocuments,
-  ];
+  // const allDocuments = [
+  //   ...existingDocuments,
+  //   ...recentDocuments,
+  // ];
 
   return (
     <>
