@@ -497,7 +497,7 @@ export default function IssuesTable({ data = [], filters = {}, onReview }) {
             </div>
 
             <div className="mt-4">
-              <label className="mb-1 block text-[12px] font-medium">Name</label>
+              <label className="mb-1 block text-[12px] font-medium">Email</label>
 
               <input
                 type="text"
@@ -518,8 +518,9 @@ export default function IssuesTable({ data = [], filters = {}, onReview }) {
                 onChange={(e) => setAssignStatus(e.target.value)}
                 className="h-10 w-full rounded-md border px-3"
               >
-                <option>In Progress</option>
                 <option>Open</option>
+                <option>Re-opened</option>
+                <option>In Progress</option>
               </select>
             </div>
 
