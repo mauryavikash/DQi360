@@ -11,13 +11,13 @@ import {
 
 function FilterSelect({ label, value, onChange, options }) {
   return (
-    <label className="flex h-8 items-center gap-2 rounded-md border border-slate-200 bg-white px-2 text-[9px] text-slate-500">
-      {label}
+<label className="flex items-center gap-3 rounded-xl border border-[#D9E0EB] bg-slate-50 px-3 py-2">     
+   {label}
       <select
-        value={value}
-        onChange={(event) => onChange(event.target.value)}
-        className="bg-transparent text-[9px] text-slate-700 outline-none"
-      >
+  value={value}
+  onChange={(event) => onChange(event.target.value)}
+  className="rounded border border-[#D9E0EB]  px-2 py-1 text-xs"
+>
         <option value="All">All</option>
         {options.filter(Boolean).map((option) => (
           <option key={option} value={option}>
@@ -145,7 +145,7 @@ export default function AuditTable({ events = [], onViewDetail }) {
         </button>
       </div>
       {showFilters && (
-        <div className="mt-4 flex flex-wrap text-[12px] gap-3">
+        <div className="mt-6 flex flex-wrap gap-4">
           <FilterSelect
             label="Event Type"
             value={eventType}
@@ -241,7 +241,7 @@ export default function AuditTable({ events = [], onViewDetail }) {
             {!rows.length && (
               <tr>
                 <td colSpan={11} className="p-8 text-center text-slate-400">
-                  No audit events match the current filters.
+                   No Audit Events Found.
                 </td>
               </tr>
             )}

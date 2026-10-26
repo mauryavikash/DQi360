@@ -145,7 +145,7 @@ export default function MyTaskTable({ tasks = [], filters = {}, onOpenTask }) {
         </div>
 
         {showFilters && (
-          <div className="mt-6 flex flex-wrap gap-4">
+          <div className="mt-6 flex flex-wrap items-start gap-4">
             {filterControls.map(([label, value, onChange, options]) => (
               <div
                 key={label}
@@ -171,6 +171,20 @@ export default function MyTaskTable({ tasks = [], filters = {}, onOpenTask }) {
                 </select>
               </div>
             ))}
+            <button
+              onClick={() => {
+                setQuery("");
+                setSeverity("All");
+                setIssueType("All");
+                setSourceSystem("All");
+                setStatus("All");
+                setAssignee("All");
+                setCurrentPage(1);
+              }}
+              className="mt-2 text-[12px] font-semibold text-[#0B63F6]"
+            >
+              Clear all
+            </button>
           </div>
         )}
       </section>
@@ -223,44 +237,58 @@ export default function MyTaskTable({ tasks = [], filters = {}, onOpenTask }) {
             </thead>
 
             <tbody>
-              {paginatedData.map((row) => (
-                <tr
-                  key={row.issue_id}
-                  className="border-b border-[#E5EAF2] hover:bg-[#FAFBFC]"
-                >
-                  <td className="p-2">
-                    <span
-                      className={`inline-flex items-center gap-1 rounded-full px-3 py-3 text-xs font-semibold ${getSeverityStyle(
-                        row.severity,
-                      )}`}
-                    >
-                      <TriangleAlert size={12} />
-                      {row.severity}
-                    </span>
+              {paginatedData.length === 0 ? (
+                <tr>
+                  <td
+                    colSpan={11}
+                    className="h-[200px] text-center align-middle"
+                  >
+                    <div className="flex items-center justify-center">
+                      <span className="text-[16px] font-medium text-[#667085]">
+                        No Tasks Found
+                      </span>
+                    </div>
                   </td>
+                </tr>
+              ) : (
+                paginatedData.map((row) => (
+                  <tr
+                    key={row.issue_id}
+                    className="border-b border-[#E5EAF2] hover:bg-[#FAFBFC]"
+                  >
+                    <td className="p-2">
+                      <span
+                        className={`inline-flex items-center gap-1 rounded-full px-3 py-3 text-xs font-semibold ${getSeverityStyle(
+                          row.severity,
+                        )}`}
+                      >
+                        <TriangleAlert size={12} />
+                        {row.severity}
+                      </span>
+                    </td>
 
-                  <td className="p-2 font-semibold text-[#0B63F6]">
-                    {row.issue_id}
-                  </td>
+                    <td className="p-2 font-semibold text-[#0B63F6]">
+                      {row.issue_id}
+                    </td>
 
-                  <td className="p-2 text-[#24324B]">{row.customer_name}</td>
+                    <td className="p-2 text-[#24324B]">{row.customer_name}</td>
 
-                  <td className="max-w-[250px] p-2">
-                    <div className="line-clamp-2 text-[#555]">{row.why}</div>
-                  </td>
+                    <td className="max-w-[250px] p-2">
+                      <div className="line-clamp-2 text-[#555]">{row.why}</div>
+                    </td>
 
-                  <td className="p-2">{row.issue_type}</td>
+                    <td className="p-2">{row.issue_type}</td>
 
-                  <td className="p-2">{row.source_system}</td>
+                    <td className="p-2">{row.source_system}</td>
 
-                  <td className="p-2">{row.assigned_date}</td>
-                  <td className="p-2">{row.assigned_to}</td>
+                    <td className="p-2">{row.assigned_date}</td>
+                    <td className="p-2">{row.assigned_to}</td>
 
-                  <td className="p-2">{row.age_days ?? 0}d</td>
+                    <td className="p-2">{row.age_days ?? 0}d</td>
 
-                  <td className="p-2">
-                    <span
-                      className="
+                    <td className="p-2">
+                      <span
+                        className="
                   inline-flex
                   min-w-[80px]
                   justify-center
@@ -272,22 +300,22 @@ export default function MyTaskTable({ tasks = [], filters = {}, onOpenTask }) {
                   text-sm
                   text-blue-700
                 "
-                    >
-                      {row.status}
-                    </span>
-                  </td>
+                      >
+                        {row.status}
+                      </span>
+                    </td>
 
-                  <td className="p-2">
-                    <button
-                      onClick={() =>
-                        onOpenTask?.(
-                          {
-                            issueId: row.issue_id,
-                          },
-                          row.status === "In Progress" ? "continue" : "start",
-                        )
-                      }
-                      className="
+                    <td className="p-2">
+                      <button
+                        onClick={() =>
+                          onOpenTask?.(
+                            {
+                              issueId: row.issue_id,
+                            },
+                            row.status === "In Progress" ? "continue" : "start",
+                          )
+                        }
+                        className="
                   h-[36px]
                   min-w-[80px]
                   rounded-xl
@@ -298,12 +326,13 @@ export default function MyTaskTable({ tasks = [], filters = {}, onOpenTask }) {
                   font-semibold
                   text-[#0B63F6]
                 "
-                    >
-                      {row.status === "In Progress" ? "Continue" : "Start"}
-                    </button>
-                  </td>
-                </tr>
-              ))}
+                      >
+                        {row.status === "In Progress" ? "Continue" : "Start"}
+                      </button>
+                    </td>
+                  </tr>
+                ))
+              )}
             </tbody>
           </table>
           <div className="flex items-center justify-between border-t border-[#E5EAF2] bg-white px-6 py-4">

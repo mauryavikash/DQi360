@@ -92,8 +92,8 @@ export default function IssuesTable({ data = [], filters = {}, onReview }) {
   ];
 
   const categoryOptions = filters.categories ?? [
-  ...new Set(data.map((item) => item.category).filter(Boolean)),
-];
+    ...new Set(data.map((item) => item.category).filter(Boolean)),
+  ];
 
   const sourceOptions = filters.source_systems ?? [
     ...new Set(data.map((item) => item.sourceSystem)),
@@ -362,76 +362,91 @@ export default function IssuesTable({ data = [], filters = {}, onReview }) {
             </thead>
 
             <tbody>
-              {paginatedData.map((item) => (
-                <tr
-                  key={item.issueId}
-                  className="border-t border-[#EAECF0] text-[12px] text-[#475467]"
-                >
-                  <td className="p-2 max-w-[60px] text-[#1565F9]">
-                    {item.issueId}
+              {paginatedData.length === 0 ? (
+                <tr>
+                  <td
+                    colSpan={userRole === "owner" ? 14 : 13}
+                    className="h-[200px] text-center align-middle"
+                  >
+                    <div className="flex items-center justify-center">
+                      <span className="text-[16px] font-medium text-[#667085]">
+                        No issues found
+                      </span>
+                    </div>
                   </td>
+                </tr>
+              ) : (
+                paginatedData.map((item) => (
+                  <tr
+                    key={item.issueId}
+                    className="border-t border-[#EAECF0] text-[12px] text-[#475467]"
+                  >
+                    <td className="p-2 max-w-[60px] text-[#1565F9]">
+                      {item.issueId}
+                    </td>
 
-                  <td className="p-2">{item.customerId}</td>
+                    <td className="p-2">{item.customerId}</td>
 
-                  <td className="p-2 max-w-[120px]">{item.customerName}</td>
+                    <td className="p-2 max-w-[120px]">{item.customerName}</td>
 
-                  <td className="p-2">{item.category}</td>
+                    <td className="p-2">{item.category}</td>
 
-                  <td className="p-2 max-w-[550px]">{item.rule}</td>
+                    <td className="p-2 max-w-[550px]">{item.rule}</td>
 
-                  <td className="p-2">
-                    <span
-                      className={`inline-flex items-center gap-1 p-2 rounded-lg text-[12px] font-semibold ${severityColors[item.severity]}`}
-                    >
-                      <AlertTriangle size={12} />
-                      {item.severity}
-                    </span>
-                  </td>
+                    <td className="p-2">
+                      <span
+                        className={`inline-flex items-center gap-1 p-2 rounded-lg text-[12px] font-semibold ${severityColors[item.severity]}`}
+                      >
+                        <AlertTriangle size={12} />
+                        {item.severity}
+                      </span>
+                    </td>
 
-                  <td className="p-2">{item.dqScore}</td>
+                    <td className="p-2">{item.dqScore}</td>
 
-                  <td className="p-2">{item.sourceSystem}</td>
+                    <td className="p-2">{item.sourceSystem}</td>
 
-                  <td className="p-2">{item.assignee}</td>
+                    <td className="p-2">{item.assignee}</td>
 
-                  <td className="p-2">
-                    <span
-                      className={`inline-flex items-center justify-center min-w-[90px] p-2rounded-lg text-[12px] font-semibold ${statusColors[item.status]}`}
-                    >
-                      {item.status}
-                    </span>
-                  </td>
+                    <td className="p-2">
+                      <span
+                        className={`inline-flex items-center justify-center min-w-[90px] p-2rounded-lg text-[12px] font-semibold ${statusColors[item.status]}`}
+                      >
+                        {item.status}
+                      </span>
+                    </td>
 
-                  <td className="p-2">{item.age}</td>
+                    <td className="p-2">{item.age}</td>
 
-                  <td className="p-2">{item.detectedDate}</td>
+                    <td className="p-2">{item.detectedDate}</td>
 
-                  <td className="p-2">
-                    <button
-                      onClick={() => onReview(item)}
-                      className="h-[24px] min-w-[62px] rounded-md border border-[#3B82F6] text-[12px] font-semibold text-[#155EEF] hover:bg-blue-50"
-                    >
-                      Review
-                    </button>
-                  </td>
-
-                  {userRole === "owner" && (
                     <td className="p-2">
                       <button
-                        onClick={() => {
-                          setAssignName("");
-                          setAssignStatus("In Progress");
-                          setSelectedIssueId(item.issueId);
-                          setShowAssignPopup(true);
-                        }}
-                        className="h-[24px] min-w-[62px] cursor-pointer rounded-md border border-[#3B82F6] text-[12px] font-semibold text-[#155EEF] hover:bg-blue-50"
+                        onClick={() => onReview(item)}
+                        className="h-[24px] min-w-[62px] rounded-md border border-[#3B82F6] text-[12px] font-semibold text-[#155EEF] hover:bg-blue-50"
                       >
-                        Assign
+                        Review
                       </button>
                     </td>
-                  )}
-                </tr>
-              ))}
+
+                    {userRole === "owner" && (
+                      <td className="p-2">
+                        <button
+                          onClick={() => {
+                            setAssignName("");
+                            setAssignStatus("In Progress");
+                            setSelectedIssueId(item.issueId);
+                            setShowAssignPopup(true);
+                          }}
+                          className="h-[24px] min-w-[62px] cursor-pointer rounded-md border border-[#3B82F6] text-[12px] font-semibold text-[#155EEF] hover:bg-blue-50"
+                        >
+                          Assign
+                        </button>
+                      </td>
+                    )}
+                  </tr>
+                ))
+              )}
             </tbody>
           </table>
         </div>

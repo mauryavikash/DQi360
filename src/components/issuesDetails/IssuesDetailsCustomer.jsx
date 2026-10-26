@@ -82,16 +82,16 @@ export default function IssuesDetailsCustomer({ issueData }) {
               {issueData.source_system || "-"} / {issueData.customer_id || "-"}
             </dd>
             <dt className="text-slate-500">Evidence</dt>
-<dd>
-  <div className="rounded-lg bg-slate-50 p-2 text-slate-700">
-    {(issueData?.evidence || "")
-      .split("\n")
-      .filter(Boolean)
-      .map((line, index) => (
-        <div key={index}>{line}</div>
-      ))}
-  </div>
-</dd>
+            <dd>
+              <div className="rounded-lg bg-slate-50 p-2 text-slate-700">
+                {(issueData?.evidence || "")
+                  .split("\n")
+                  .filter(Boolean)
+                  .map((line, index) => (
+                    <div key={index}>{line}</div>
+                  ))}
+              </div>
+            </dd>
             <dt className="text-slate-500">Confidence Label</dt>
             <dd>
               <div className="text-slate-700">
@@ -192,26 +192,27 @@ export default function IssuesDetailsCustomer({ issueData }) {
               <dt className="text-slate-500 mr-2">Proposed Value</dt>
 
               <dd>
-                <input
+                {/* <input
                   value={proposedValue || issueData.proposed_value || ""}
-                  // onChange={(e) => setProposedValue(e.target.value)}
+                  onChange={(e) => setProposedValue(e.target.value)}
                   className="h-7 w-full rounded border border-blue-200 px-2"
                   placeholder="Enter corrected value"
-                />
+                /> */}
+                <dd>{issueData.suggested_value || "-"}</dd>
               </dd>
 
               <dt className="text-slate-500 mr-2 break-words">
-                Recommendation
+                Remediation Rationale
               </dt>
 
               <dd className="text-green-600 font-medium">
-                {issueData.recommendation || "-"}
+                {issueData.rationale_template || "-"}
               </dd>
 
               <dt className="text-slate-500 mr-2">Evidence Status</dt>
 
               <dd className="text-amber-600 font-medium">
-                {issueData.evidence || "-"}
+                {issueData?.proposed_value_panel?.evidence_status || "-"}
               </dd>
 
               <dt className="text-slate-500 mr-2">Source</dt>
