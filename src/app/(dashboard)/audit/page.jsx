@@ -102,7 +102,7 @@ export default function AuditPage() {
             </h1>
 
             <p className="mt-0.5 text-[10px] text-slate-500">
-              Audit Subtitle
+              Trace customer master data changes, data quality actions and governance decisions
             </p>
           </div>
 

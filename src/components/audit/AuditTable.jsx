@@ -34,7 +34,7 @@ export default function AuditTable({ events = [], onViewDetail }) {
   const [eventType, setEventType] = useState("All");
   const [source, setSource] = useState("All");
   const [status, setStatus] = useState("All");
-  const [pageSize, setPageSize] = useState(25);
+  const [pageSize, setPageSize] = useState(10);
   const [page, setPage] = useState(1);
   const [showFilters, setShowFilters] = useState(true);
   const filtered = useMemo(
@@ -247,7 +247,7 @@ export default function AuditTable({ events = [], onViewDetail }) {
             )}
           </tbody>
         </table>
-        <footer className="flex items-center justify-between border-t px-3 py-2 text-[9px] text-slate-500">
+        <footer className="flex items-center justify-between border-t px-3 py-2 text-[12px] text-slate-500">
           <div className="flex items-center gap-2">
             Rows per page{" "}
             <select
@@ -256,7 +256,7 @@ export default function AuditTable({ events = [], onViewDetail }) {
                 setPageSize(Number(event.target.value));
                 setPage(1);
               }}
-              className="rounded border border-blue-300 px-2 py-1 text-blue-600"
+              className="h-8 rounded border border-blue-300 px-2 py-1 text-blue-600"
             >
               {[10, 25, 50].map((size) => (
                 <option key={size} value={size}>
@@ -271,24 +271,52 @@ export default function AuditTable({ events = [], onViewDetail }) {
             </span>
           </div>
           <div className="flex items-center gap-1">
-            <button
-              disabled={activePage === 1}
-              onClick={() => setPage(activePage - 1)}
-              className="rounded border p-1 disabled:opacity-40"
-            >
-              <ChevronLeft size={12} />
-            </button>
-            <span className="rounded bg-blue-600 px-2 py-1 text-white">
-              {activePage}
-            </span>
-            <button
-              disabled={activePage === pageCount}
-              onClick={() => setPage(activePage + 1)}
-              className="rounded border p-1 disabled:opacity-40"
-            >
-              <ChevronRight size={12} />
-            </button>
-          </div>
+  <button
+    disabled={activePage === 1}
+    onClick={() => setPage((prev) => Math.max(prev - 1, 1))}
+    className="h-8 rounded border p-1 disabled:opacity-40"
+  >
+    <ChevronLeft size={12} />
+  </button>
+
+  {Array.from(
+    {
+      length: Math.min(5, pageCount),
+    },
+    (_, index) => {
+      const startPage = Math.max(
+        1,
+        Math.min(activePage - 2, pageCount - 4),
+      );
+
+      const pageNumber = startPage + index;
+
+      return (
+        <button
+          key={pageNumber}
+          onClick={() => setPage(pageNumber)}
+          className={`h-8 min-w-[32px] rounded ${
+            activePage === pageNumber
+              ? "bg-blue-600 text-white"
+              : "border border-slate-300 text-blue-600"
+          }`}
+        >
+          {pageNumber}
+        </button>
+      );
+    },
+  )}
+
+  <button
+    disabled={activePage === pageCount}
+    onClick={() =>
+      setPage((prev) => Math.min(prev + 1, pageCount))
+    }
+    className="h-8 rounded border p-1 disabled:opacity-40"
+  >
+    <ChevronRight size={12} />
+  </button>
+</div>
         </footer>
       </div>
     </section>

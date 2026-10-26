@@ -286,7 +286,7 @@ export default function IssuesTable({ data = [], filters = {}, onReview }) {
             onChange={setStatus}
             options={statusOptions}
           />
-{countryOptions.length > 0 && (
+          {countryOptions.length > 0 && (
             <SelectFilter
               label="Country / Region"
               value={country}
@@ -303,7 +303,7 @@ export default function IssuesTable({ data = [], filters = {}, onReview }) {
 
           <button
             onClick={handleClearAll}
-            className="ml-auto text-[#1565F9] text-[12px] font-medium"
+            className="ml-auto mr-2 text-[#1565F9] text-[12px] font-medium"
           >
             Clear all
           </button>
@@ -460,20 +460,33 @@ export default function IssuesTable({ data = [], filters = {}, onReview }) {
               <ChevronLeft size={16} />
             </button>
 
-            {Array.from({ length: Math.min(totalPages, 5) }, (_, index) => (
-              <button
-                key={index}
-                onClick={() => setCurrentPage(index + 1)}
-                className={`w-8 h-8 rounded-lg text-sm ${
-                  visiblePage === index + 1
-                    ? "bg-[#1565F9] text-white"
-                    : "text-[#1565F9]"
-                }`}
-              >
-                {index + 1}
-              </button>
-            ))}
+            {Array.from(
+              {
+                length: Math.min(5, totalPages),
+              },
+              (_, index) => {
+                const startPage = Math.max(
+                  1,
+                  Math.min(currentPage - 2, totalPages - 4),
+                );
 
+                const page = startPage + index;
+
+                return (
+                  <button
+                    key={page}
+                    onClick={() => setCurrentPage(page)}
+                    className={`h-8 w-8 rounded-lg text-sm ${
+                      visiblePage === page
+                        ? "bg-[#1565F9] text-white"
+                        : "border border-[#D0D5DD] text-[#1565F9]"
+                    }`}
+                  >
+                    {page}
+                  </button>
+                );
+              },
+            )}
             <button
               disabled={visiblePage === totalPages}
               onClick={() => setCurrentPage(visiblePage + 1)}
@@ -497,7 +510,9 @@ export default function IssuesTable({ data = [], filters = {}, onReview }) {
             </div>
 
             <div className="mt-4">
-              <label className="mb-1 block text-[12px] font-medium">Email</label>
+              <label className="mb-1 block text-[12px] font-medium">
+                Email
+              </label>
 
               <input
                 type="text"

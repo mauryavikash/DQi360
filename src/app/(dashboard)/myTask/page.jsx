@@ -39,7 +39,7 @@ function normalizeTask(task) {
 }
 
 export default function MyTaskPage() {
-  const [workbenchApiData, setWorkbenchApiData] = useState(null);
+  const [myTaskApiData, setMyTaskApiData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [selectedTask, setSelectedTask] = useState(null);
@@ -106,13 +106,13 @@ const response = await getMyTaskDetails(
         );
 
         if (isMounted) {
-          setWorkbenchApiData(hasPayload ? payload : null);
+          setMyTaskApiData(hasPayload ? payload : null);
         }
       } catch (error) {
         console.error("Workbench API Error:", error);
         if (isMounted) {
           setError(error);
-          setWorkbenchApiData(null);
+          setMyTaskApiData(null);
         }
       } finally {
         if (isMounted) {
@@ -128,69 +128,9 @@ const response = await getMyTaskDetails(
     };
   }, []);
 
-  //   useEffect(() => {
-  //   let isMounted = true;
-  //   let sessionUser;
-
-  //   try {
-  //     sessionUser = JSON.parse(
-  //       sessionStorage.getItem("user") ?? "null"
-  //     );
-  //   } catch {
-  //     sessionUser = null;
-  //   }
-
-  //   const currentUserEmail = sessionUser?.email;
-
-  //   const OWNER_EMAILS = [
-  //     "unnati.gaur@capgemini.com",
-  //     "d-vigneshwaran.d-vigneshwaran@capgemini.com",
-  //     "vikash-chand.maury@capgemini.com",
-  //   ];
-
-  //   const isOwner = OWNER_EMAILS.includes(
-  //     currentUserEmail?.toLowerCase()
-  //   );
-
-  //   async function loadWorkbenchData() {
-  //     try {
-  //       setError(null);
-
-  //       const response = isOwner
-  //         ? await getMyTasks("ALL")
-  //         : await getMyTasks(currentUserEmail);
-
-  //       const payload = response?.data ?? response;
-
-  //       if (isMounted) {
-  //         setWorkbenchApiData(payload);
-  //       }
-  //     } catch (error) {
-  //       console.error(error);
-  //       if (isMounted) {
-  //         setError(error);
-  //       }
-  //     } finally {
-  //       if (isMounted) {
-  //         setLoading(false);
-  //       }
-  //     }
-  //   }
-
-  //   loadWorkbenchData();
-
-  //   return () => {
-  //     isMounted = false;
-  //   };
-  // }, []);
-
-  // const tasks = useMemo(
-  //   () => (workbenchApiData?.tasks ?? []).map(normalizeTask),
-  //   [workbenchApiData],
-  // );
   const tasks = useMemo(
-  () => workbenchApiData?.tasks ?? [],
-  [workbenchApiData]
+  () => myTaskApiData?.tasks ?? [],
+  [myTaskApiData]
 );
   const summary = useMemo(
     () =>
@@ -198,9 +138,9 @@ const response = await getMyTaskDetails(
         title,
         subtitle,
         type,
-        value: Number(workbenchApiData?.summary?.[key] ?? 0),
+        value: Number(myTaskApiData?.summary?.[key] ?? 0),
       })),
-    [workbenchApiData],
+    [myTaskApiData],
   );
 
   if (loading) {
@@ -226,16 +166,13 @@ const response = await getMyTaskDetails(
           </div>
         </header>
 
-        {/* {selectedTask ? 
-        <MyTaskDetail task={selectedTask} onBack={() => setSelectedTask(null)} /> : <><MyTaskKpis summary={summary} />
-        <MyTaskTable tasks={tasks} onOpenTask={setSelectedTask} /></>} */}
         {showDetails ? (
           <MyTaskDetail task={selectedTask} onBack={handleBack} />
         ) : (
           <>
             <MyTaskKpis summary={summary} />
 
-            <MyTaskTable tasks={tasks} onOpenTask={handleOpenTask} />
+            <MyTaskTable tasks={tasks} filters={myTaskApiData?.filters} onOpenTask={handleOpenTask} />
           </>
         )}
       </div>

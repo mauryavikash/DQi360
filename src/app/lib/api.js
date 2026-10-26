@@ -10,8 +10,10 @@ function getRequestUrl(config) {
 
   const configuredBaseUrl = config.baseURL ?? "";
   const baseUrl = new URL(
-    configuredBaseUrl.endsWith("/") ? configuredBaseUrl : `${configuredBaseUrl}/`,
-    window.location.origin
+    configuredBaseUrl.endsWith("/")
+      ? configuredBaseUrl
+      : `${configuredBaseUrl}/`,
+    window.location.origin,
   );
   return new URL(config.url ?? "", baseUrl).toString();
 }
@@ -24,7 +26,7 @@ const axiosInstance = axios.create({
 });
 
 export const DASHBOARD_URL = `${API_BASE_URL}/api/dq/dashboard`;
-export const ISSUES_URL = `${API_BASE_URL}/api/dq/issues-screen?page=1&per_page=25`;
+export const ISSUES_URL = `${API_BASE_URL}/api/dq/issues-screen?page=1&per_page=all`;
 export const AUDIT_URL = `${API_BASE_URL}/api/dq/audit-screen?page=1&per_page=25`;
 // export const COPILOT_CHAT_URL = `${API_BASE_URL}/v1/copilot/chat`;
 export const LOGIN_URL = `${API_BASE_URL}/auth/login`;
@@ -75,7 +77,7 @@ axiosInstance.interceptors.request.use(
 
     return config;
   },
-  (error) => Promise.reject(error)
+  (error) => Promise.reject(error),
 );
 
 axiosInstance.interceptors.response.use(
@@ -91,7 +93,7 @@ axiosInstance.interceptors.response.use(
     }
 
     return Promise.reject(error);
-  }
+  },
 );
 // export async function getAgentStatus() {
 //   const now = Date.now();
@@ -152,12 +154,12 @@ axiosInstance.interceptors.response.use(
 
 export async function loginUser(email, password) {
   const response = await axiosInstance.post("auth/login", {
-  email,
-  password,
+    email,
+    password,
   });
 
   return response.data;
-  }
+}
 // export async function registerUser(
 // email,
 // name,
@@ -197,7 +199,7 @@ export async function getDashboard() {
 export async function getIssues() {
   if (!issuesRequest) {
     issuesRequest = axiosInstance
-      .get("api/dq/issues-screen?page=1&per_page=25")
+      .get("api/dq/issues-screen?page=1&per_page=all")
       .then((response) => response.data)
       .catch((error) => {
         issuesRequest = undefined;
@@ -209,7 +211,7 @@ export async function getIssues() {
 }
 export async function getIssueDetails(issueId) {
   const response = await axiosInstance.get(
-    `api/dq/issues-screen/${encodeURIComponent(issueId)}`
+    `api/dq/issues-screen/${encodeURIComponent(issueId)}`,
   );
 
   return response.data;
@@ -217,38 +219,19 @@ export async function getIssueDetails(issueId) {
 export async function submitIssueProposal(issueId, payload) {
   const response = await axiosInstance.post(
     `api/dq/issues/${encodeURIComponent(issueId)}/propose`,
-    payload
+    payload,
   );
-
   return response.data;
 }
 export async function assignIssue(issueId, payload) {
   const response = await axiosInstance.post(
     `api/dq/issues/${encodeURIComponent(issueId)}/assign`,
-    payload
+    payload,
   );
 
   return response.data;
 }
-// export async function getMyTasks(userName) {
-//   if (!userName) {
-//     throw new Error("A user name is required to load tasks");
-//   }
 
-//   if (!myTasksRequests.has(userName)) {
-//     const request = axiosInstance
-//       .get(`api/dq/tasks-screen/${encodeURIComponent(userName)}`)
-//       .then((response) => response.data)
-//       .catch((error) => {
-//         myTasksRequests.delete(userName);
-//         throw error;
-//       });
-
-//     myTasksRequests.set(userName, request);
-//   }
-
-//   return myTasksRequests.get(userName);
-// }
 export async function getMyTasks(email) {
   if (!email) {
     throw new Error("User email is required to load tasks");
@@ -269,25 +252,27 @@ export async function getMyTasks(email) {
 
   return myTasksRequests.get(email);
 }
-export async function getMyTaskDetails(
-  email,
-  issueId,
-  action
-) {
+export async function getMyTaskDetails(email, issueId, action) {
   const params = new URLSearchParams({
     issue_id: issueId,
   });
-
   if (action) {
     params.append("action", action);
   }
-
   const response = await axiosInstance.get(
-    `api/dq/tasks-screen/${email}?${params.toString()}`
+    `api/dq/tasks-screen/${email}?${params.toString()}`,
   );
-
   return response.data;
 }
+
+export async function submitMyTaskProposal(issueId, payload) {
+  const response = await axiosInstance.post(
+    `api/dq/my-tasks/${encodeURIComponent(issueId)}/propose`,
+    payload,
+  );
+  return response.data;
+}
+
 export async function getAudit() {
   if (!auditRequest) {
     auditRequest = axiosInstance
