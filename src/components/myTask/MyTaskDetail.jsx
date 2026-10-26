@@ -206,6 +206,18 @@ export default function MyTaskDetail({ task, onBack }) {
                     value={currentValuePanel.source_system}
                   />
                   <Row
+                    label="Root Cause"
+                    value={issue.root_cause}
+                  />
+                  <Row
+                    label="Business Impact"
+                    value={issue.business_impact}
+                  />
+                  <Row
+                    label="Suggested Owner"
+                    value={issue.suggested_owner}
+                  />
+                  <Row
                     label="Last Updated"
                     value={currentValuePanel.last_updated}
                   />
@@ -400,14 +412,15 @@ export default function MyTaskDetail({ task, onBack }) {
               <Row label="Task User" value={taskUser} />
 
               <div className="grid grid-cols-[140px_1fr] gap-2">
-                <div className="text-slate-500">View Document</div>
+                <div className="text-slate-500">Existing Documents</div>
 
                 <div>
                   <button
+                  type="button"
                     onClick={() => setShowCustomerPopup(true)}
-                    className="rounded-md border border-[#1565F9] px-3 py-1.5 text-[12px] font-semibold text-[#1565F9] hover:bg-blue-50"
+                  className="rounded bg-[#1565F9] px-3 py-1 text-[12px] font-semibold text-white"
                   >
-                    View Document
+                    View Documents
                   </button>
                 </div>
               </div>

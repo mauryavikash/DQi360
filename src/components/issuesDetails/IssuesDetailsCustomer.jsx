@@ -156,15 +156,14 @@ export default function IssuesDetailsCustomer({ issueData }) {
               <dt className="text-slate-500 mr-2">Source System</dt>
 
               <dd>{issueData.source_system || "-"}</dd>
-
-              <dt className="text-slate-500 mr-2">Last Updated</dt>
-              <dd>{issueData.assigned_date || "-"}</dd>
               <dt className="text-slate-500 mr-2">Root Cause</dt>
               <dd>{issueData.root_cause || "-"}</dd>
               <dt className="text-slate-500 mr-2"> Business Impact</dt>
               <dd>{issueData.business_impact || "-"}</dd>
               <dt className="text-slate-500 mr-2">Suggested Owner</dt>
               <dd>{issueData.suggested_owner || "-"}</dd>
+              <dt className="text-slate-500 mr-2">Last Updated</dt>
+              <dd>{issueData.last_updated || "-"}</dd>
             </dl>
           </div>
 
