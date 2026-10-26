@@ -27,7 +27,7 @@ const axiosInstance = axios.create({
 
 export const DASHBOARD_URL = `${API_BASE_URL}/api/dq/dashboard`;
 export const ISSUES_URL = `${API_BASE_URL}/api/dq/issues-screen?page=1&per_page=all`;
-export const AUDIT_URL = `${API_BASE_URL}/api/dq/audit-screen?page=1&per_page=25`;
+export const AUDIT_URL = `${API_BASE_URL}/api/dq/audit-screen?page=1&per_page=all`;
 // export const COPILOT_CHAT_URL = `${API_BASE_URL}/v1/copilot/chat`;
 export const LOGIN_URL = `${API_BASE_URL}/auth/login`;
 export const REGISTER_URL = `${API_BASE_URL}/auth/register`;
@@ -276,7 +276,7 @@ export async function submitMyTaskProposal(issueId, payload) {
 export async function getAudit() {
   if (!auditRequest) {
     auditRequest = axiosInstance
-      .get("api/dq/audit-screen?page=1&per_page=25")
+      .get("api/dq/audit-screen?page=1&per_page=all")
       .then((response) => response.data)
       .catch((error) => {
         auditRequest = undefined;

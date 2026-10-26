@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   CheckCircle2,
   FileText,
@@ -13,7 +13,12 @@ import {
 import { submitIssueProposal } from "@/app/lib/api";
 import { toast } from "sonner";
 export default function IssuesDetailsCustomer({ issueData }) {
-  const [proposedValue, setProposedValue] = useState("");
+  const [proposedValue, setProposedValue] = useState(
+    issueData?.proposed_value || "",
+  );
+  useEffect(() => {
+    setProposedValue(issueData?.proposed_value || "");
+  }, [issueData]);
   const [comment, setComment] = useState("");
   const [submitted, setSubmitted] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -73,15 +78,35 @@ export default function IssuesDetailsCustomer({ issueData }) {
             </dd>
 
             <dt className="text-slate-500">Source Record</dt>
-
             <dd className="text-slate-700">
               {issueData.source_system || "-"} / {issueData.customer_id || "-"}
             </dd>
-
-            <dt className="text-slate-500">AI Confidence</dt>
-
+            <dt className="text-slate-500">Evidence</dt>
+<dd>
+  <div className="rounded-lg bg-slate-50 p-2 text-slate-700">
+    {(issueData?.evidence || "")
+      .split("\n")
+      .filter(Boolean)
+      .map((line, index) => (
+        <div key={index}>{line}</div>
+      ))}
+  </div>
+</dd>
+            <dt className="text-slate-500">Confidence Label</dt>
             <dd>
-              <div className="rounded-md bg-slate-50 p-3 text-slate-700">
+              <div className="text-slate-700">
+                {issueData.confidence_label || "-"}
+              </div>
+            </dd>
+            <dt className="text-slate-500">Confidence Basis</dt>
+            <dd>
+              <div className="text-slate-700">
+                {issueData.confidence_basis || "-"}
+              </div>
+            </dd>
+            <dt className="text-slate-500">AI Confidence</dt>
+            <dd>
+              <div className="text-slate-700">
                 {issueData.confidence_score || "-"}
               </div>
             </dd>
@@ -115,30 +140,30 @@ export default function IssuesDetailsCustomer({ issueData }) {
               </p>
             </div>
 
-            <dl className="grid grid-cols-[90px_1fr] gap-y-2 text-[12px]">
-              <dt className="text-slate-500">Field</dt>
+            <dl className="grid grid-cols-[90px_1fr] break-words gap-y-2 text-[12px]">
+              <dt className="text-slate-500 mr-2">Field</dt>
               <dd>{issueData.field_name || "-"}</dd>
 
-              <dt className="text-slate-500">Current Value</dt>
+              <dt className="text-slate-500 mr-2">Current Value</dt>
               <dd>{issueData.current_value || "-"}</dd>
 
-              <dt className="text-slate-500">Status</dt>
+              <dt className="text-slate-500 mr-2">Status</dt>
 
               <dd className="font-semibold text-red-600">
                 {issueData.status || "-"}
               </dd>
 
-              <dt className="text-slate-500">Source System</dt>
+              <dt className="text-slate-500 mr-2">Source System</dt>
 
-              <dd>{issueData.source_system || "-"}</dd> 
+              <dd>{issueData.source_system || "-"}</dd>
 
-              <dt className="text-slate-500">Last Updated</dt>
+              <dt className="text-slate-500 mr-2">Last Updated</dt>
               <dd>{issueData.assigned_date || "-"}</dd>
-              <dt className="text-slate-500">Root Cause</dt>
+              <dt className="text-slate-500 mr-2">Root Cause</dt>
               <dd>{issueData.root_cause || "-"}</dd>
-              <dt className="text-slate-500">	Business Impact</dt> 
+              <dt className="text-slate-500 mr-2"> Business Impact</dt>
               <dd>{issueData.business_impact || "-"}</dd>
-              <dt className="text-slate-500">Suggested Owner</dt>
+              <dt className="text-slate-500 mr-2">Suggested Owner</dt>
               <dd>{issueData.suggested_owner || "-"}</dd>
             </dl>
           </div>
@@ -161,33 +186,35 @@ export default function IssuesDetailsCustomer({ issueData }) {
             </div>
 
             <dl className="grid grid-cols-[100px_1fr] gap-y-2 text-[12px]">
-              <dt className="text-slate-500">Field</dt>
+              <dt className="text-slate-500 mr-2">Field</dt>
               <dd>{issueData.field_name || "-"}</dd>
 
-              <dt className="text-slate-500">Proposed Value</dt>
+              <dt className="text-slate-500 mr-2">Proposed Value</dt>
 
               <dd>
                 <input
                   value={proposedValue || issueData.proposed_value || ""}
-                  onChange={(e) => setProposedValue(e.target.value)}
+                  // onChange={(e) => setProposedValue(e.target.value)}
                   className="h-7 w-full rounded border border-blue-200 px-2"
                   placeholder="Enter corrected value"
                 />
               </dd>
 
-              <dt className="text-slate-500 break-words">Recommendation</dt>
+              <dt className="text-slate-500 mr-2 break-words">
+                Recommendation
+              </dt>
 
               <dd className="text-green-600 font-medium">
                 {issueData.recommendation || "-"}
               </dd>
 
-              <dt className="text-slate-500">Evidence Status</dt>
+              <dt className="text-slate-500 mr-2">Evidence Status</dt>
 
               <dd className="text-amber-600 font-medium">
                 {issueData.evidence || "-"}
               </dd>
 
-              <dt className="text-slate-500">Source</dt>
+              <dt className="text-slate-500 mr-2">Source</dt>
 
               <dd>{issueData.source_system || "-"}</dd>
             </dl>
@@ -212,7 +239,7 @@ export default function IssuesDetailsCustomer({ issueData }) {
             </label>
 
             <input
-              value={proposedValue || issueData.proposed_value || ""}
+              value={proposedValue}
               onChange={(e) => setProposedValue(e.target.value)}
               className="h-9 w-full rounded-md border border-slate-300 px-3 text-[12px]"
               placeholder="Enter corrected value"
@@ -334,7 +361,6 @@ export default function IssuesDetailsCustomer({ issueData }) {
             the source system.
           </div>
         </div>
-
       </section>
     </div>
   );
