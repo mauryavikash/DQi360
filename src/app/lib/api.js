@@ -265,9 +265,9 @@ export async function getMyTaskDetails(email, issueId, action) {
   return response.data;
 }
 
-export async function submitMyTaskProposal(issueId, payload) {
+export async function submitMyTaskProposal(email, payload) {
   const response = await axiosInstance.post(
-    `api/dq/my-tasks/${encodeURIComponent(issueId)}/propose`,
+    `/api/dq/tasks-screen/${email}`,
     payload,
   );
   return response.data;
