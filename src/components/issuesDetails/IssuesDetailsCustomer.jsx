@@ -179,9 +179,9 @@ export default function IssuesDetailsCustomer({ issueData }) {
                 </p>
               </div>
 
-              <span className="text-[12px] font-semibold text-blue-600">
+              {/* <span className="text-[12px] font-semibold text-blue-600">
                 {issueData.proposed_by || ""}
-              </span>
+              </span> */}
             </div>
 
             <dl className="grid grid-cols-[100px_1fr] gap-y-2 text-[12px]">
