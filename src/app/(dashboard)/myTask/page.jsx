@@ -11,6 +11,7 @@ const KPI_PRESENTATION = [
   ["in_progress", "In Progress", "Tasks in progress", "progress"],
   ["awaiting_approval", "Awaiting Approval", "Read-only view", "approval"],
   ["approved", "Approved", "Read-only view", "approved"],
+  ["total", "Total Tasks", "Total team workload", "todo"],
 ];
 
 function formatDate(value) {
@@ -39,7 +40,7 @@ function normalizeTask(task) {
 }
 
 export default function MyTaskPage() {
-  const [workbenchApiData, setWorkbenchApiData] = useState(null);
+  const [myTaskApiData, setMyTaskApiData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [selectedTask, setSelectedTask] = useState(null);
@@ -53,11 +54,7 @@ export default function MyTaskPage() {
 
       const userEmail = sessionUser?.email;
 
-const response = await getMyTaskDetails(
-  userEmail,
-  task.issueId,
-  action
-);
+      const response = await getMyTaskDetails(userEmail, task.issueId, action);
 
       setSelectedTask(response);
       setShowDetails(true);
@@ -106,13 +103,13 @@ const response = await getMyTaskDetails(
         );
 
         if (isMounted) {
-          setWorkbenchApiData(hasPayload ? payload : null);
+          setMyTaskApiData(hasPayload ? payload : null);
         }
       } catch (error) {
         console.error("Workbench API Error:", error);
         if (isMounted) {
           setError(error);
-          setWorkbenchApiData(null);
+          setMyTaskApiData(null);
         }
       } finally {
         if (isMounted) {
@@ -128,79 +125,16 @@ const response = await getMyTaskDetails(
     };
   }, []);
 
-  //   useEffect(() => {
-  //   let isMounted = true;
-  //   let sessionUser;
-
-  //   try {
-  //     sessionUser = JSON.parse(
-  //       sessionStorage.getItem("user") ?? "null"
-  //     );
-  //   } catch {
-  //     sessionUser = null;
-  //   }
-
-  //   const currentUserEmail = sessionUser?.email;
-
-  //   const OWNER_EMAILS = [
-  //     "unnati.gaur@capgemini.com",
-  //     "d-vigneshwaran.d-vigneshwaran@capgemini.com",
-  //     "vikash-chand.maury@capgemini.com",
-  //   ];
-
-  //   const isOwner = OWNER_EMAILS.includes(
-  //     currentUserEmail?.toLowerCase()
-  //   );
-
-  //   async function loadWorkbenchData() {
-  //     try {
-  //       setError(null);
-
-  //       const response = isOwner
-  //         ? await getMyTasks("ALL")
-  //         : await getMyTasks(currentUserEmail);
-
-  //       const payload = response?.data ?? response;
-
-  //       if (isMounted) {
-  //         setWorkbenchApiData(payload);
-  //       }
-  //     } catch (error) {
-  //       console.error(error);
-  //       if (isMounted) {
-  //         setError(error);
-  //       }
-  //     } finally {
-  //       if (isMounted) {
-  //         setLoading(false);
-  //       }
-  //     }
-  //   }
-
-  //   loadWorkbenchData();
-
-  //   return () => {
-  //     isMounted = false;
-  //   };
-  // }, []);
-
-  // const tasks = useMemo(
-  //   () => (workbenchApiData?.tasks ?? []).map(normalizeTask),
-  //   [workbenchApiData],
-  // );
-  const tasks = useMemo(
-  () => workbenchApiData?.tasks ?? [],
-  [workbenchApiData]
-);
+  const tasks = useMemo(() => myTaskApiData?.tasks ?? [], [myTaskApiData]);
   const summary = useMemo(
     () =>
       KPI_PRESENTATION.map(([key, title, subtitle, type]) => ({
         title,
         subtitle,
         type,
-        value: Number(workbenchApiData?.summary?.[key] ?? 0),
+        value: Number(myTaskApiData?.team_summary?.[key] ?? 0),
       })),
-    [workbenchApiData],
+    [myTaskApiData],
   );
 
   if (loading) {
@@ -214,7 +148,7 @@ const response = await getMyTaskDetails(
       data-has-error={Boolean(error)}
     >
       <div className="mx-auto max-w-[1600px]">
-        <header className="flex items-start justify-between">
+        {/* <header className="flex items-start justify-between">
           <div>
             <h1 className="text-[18px] font-bold leading-5 text-slate-800">
               My Tasks
@@ -224,18 +158,31 @@ const response = await getMyTaskDetails(
               Assigned customer master data quality work
             </p>
           </div>
-        </header>
+        </header> */}
+        {!showDetails && (
+          <header className="flex items-start justify-between">
+            <div>
+              <h1 className="text-[18px] font-bold leading-5 text-slate-800">
+                My Tasks
+              </h1>
 
-        {/* {selectedTask ? 
-        <MyTaskDetail task={selectedTask} onBack={() => setSelectedTask(null)} /> : <><MyTaskKpis summary={summary} />
-        <MyTaskTable tasks={tasks} onOpenTask={setSelectedTask} /></>} */}
+              <p className="mt-0.5 text-[12px] text-slate-500">
+                Assigned customer master data quality work
+              </p>
+            </div>
+          </header>
+        )}
         {showDetails ? (
           <MyTaskDetail task={selectedTask} onBack={handleBack} />
         ) : (
           <>
             <MyTaskKpis summary={summary} />
 
-            <MyTaskTable tasks={tasks} onOpenTask={handleOpenTask} />
+            <MyTaskTable
+              tasks={tasks}
+              filters={myTaskApiData?.filters}
+              onOpenTask={handleOpenTask}
+            />
           </>
         )}
       </div>

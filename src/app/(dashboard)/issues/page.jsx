@@ -133,7 +133,7 @@ export default function IssuesPage() {
       //  data-has-error={Boolean(error)}
     >
       <div className="mx-auto max-w-[1600px]">
-        <header className="flex items-start justify-between">
+        {/* <header className="flex items-start justify-between">
           <div>
             <h1 className="text-[18px] font-bold leading-5 text-slate-800">
               Issues Queue
@@ -153,7 +153,32 @@ export default function IssuesPage() {
               Refresh
             </button>
           </div>
-        </header>
+        </header> */}
+
+        {!showDetails && (
+  <header className="flex items-start justify-between">
+    <div>
+      <h1 className="text-[18px] font-bold leading-5 text-slate-800">
+        Issues Queue
+      </h1>
+
+      <p className="mt-0.5 text-[10px] text-slate-500">
+        {issuesData.length.toLocaleString()} open deterministic DQ-rule
+        findings
+      </p>
+    </div>
+
+    <div>
+      <button
+        onClick={() => window.location.reload()}
+        className="flex items-center text-[12px] gap-2 rounded-md bg-[#1565F9] px-2 py-2 text-white"
+      >
+        <RefreshCw className="h-4 w-4" />
+        Refresh
+      </button>
+    </div>
+  </header>
+)}
         {!showDetails ? (
           <IssuesTable
             data={issuesData}

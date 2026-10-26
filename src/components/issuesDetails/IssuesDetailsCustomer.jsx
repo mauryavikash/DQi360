@@ -35,7 +35,7 @@ export default function IssuesDetailsCustomer({ issueData }) {
 
           <button
             type="button"
-            className="text-[9px] font-semibold text-[#2563EB]"
+            className="text-[12px] font-semibold text-[#2563EB]"
           >
             How this rule is evaluated →
           </button>

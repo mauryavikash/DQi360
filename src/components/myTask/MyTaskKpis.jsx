@@ -38,9 +38,11 @@ export default function MyTaskKpis({ summary = [] }) {
     supporting: item.subtitle,
     supportingColor: "text-[#667695]",
 
-    // Tooltip Data
-    invoiceCount: item.invoiceCount,
-    invoiceValue: item.invoiceValue,
+   tooltipData: {
+  Status: item.title,
+  Count: item.value,
+
+},
   }));
 
   return (

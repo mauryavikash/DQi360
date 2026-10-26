@@ -1,59 +1,53 @@
 "use client";
 
-import { useMemo, useState } from "react";
-import {
-  Search,
-  Filter,
-  ChevronDown,
-  MoreVertical,
-  TriangleAlert,
-} from "lucide-react";
+import { useMemo, useState, useEffect } from "react";
+import { Search, Filter, ChevronDown, TriangleAlert } from "lucide-react";
 
-export default function MyTaskTable({ tasks = [], onOpenTask }) {
+export default function MyTaskTable({ tasks = [], filters = {}, onOpenTask }) {
   const [query, setQuery] = useState("");
   const [severity, setSeverity] = useState("All");
   const [issueType, setIssueType] = useState("All");
   const [sourceSystem, setSourceSystem] = useState("All");
   const [status, setStatus] = useState("All");
+  const [assignee, setAssignee] = useState("All");
   const [showFilters, setShowFilters] = useState(true);
 
   const [currentPage, setCurrentPage] = useState(1);
   const [rowsPerPage, setRowsPerPage] = useState(10);
-
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [query, severity, issueType, sourceSystem, status, assignee]);
   const filterControls = [
-    [
-      "Severity",
-      severity,
-      setSeverity,
-      [...new Set(tasks.map((t) => t.severity).filter(Boolean))],
-    ],
+    ["Severity", severity, setSeverity, filters?.severities || []],
     [
       "Issue Type",
       issueType,
       setIssueType,
-      [...new Set(tasks.map((t) => t.issue_type).filter(Boolean))],
+      (filters?.issue_types || []).map((item) => item.issue_type),
     ],
     [
       "Source System",
       sourceSystem,
       setSourceSystem,
-      [...new Set(tasks.map((t) => t.source_system).filter(Boolean))],
+      filters?.source_systems || [],
     ],
+    ["Status", status, setStatus, filters?.statuses || []],
     [
-      "Status",
-      status,
-      setStatus,
-      [...new Set(tasks.map((t) => t.status).filter(Boolean))],
+      "Assignee",
+      assignee,
+      setAssignee,
+      (filters?.assignees || []).map((item) => item.assignee),
     ],
   ];
 
   const filteredData = useMemo(() => {
     return tasks.filter((item) => {
+      const searchText = query.toLowerCase();
+
       const searchMatch =
-        (item.customer_name || "")
-          .toLowerCase()
-          .includes(query.toLowerCase()) ||
-        (item.issue_id || "").toLowerCase().includes(query.toLowerCase());
+        (item.customer_name || "").toLowerCase().includes(searchText) ||
+        (item.issue_id || "").toLowerCase().includes(searchText) ||
+        (item.assigned_to || "").toLowerCase().includes(searchText);
 
       const severityMatch = severity === "All" || item.severity === severity;
 
@@ -63,12 +57,17 @@ export default function MyTaskTable({ tasks = [], onOpenTask }) {
         sourceSystem === "All" || item.source_system === sourceSystem;
 
       const statusMatch = status === "All" || item.status === status;
-
+      const assigneeMatch = assignee === "All" || item.assigned_to === assignee;
       return (
-        searchMatch && severityMatch && typeMatch && sourceMatch && statusMatch
+        searchMatch &&
+        severityMatch &&
+        typeMatch &&
+        sourceMatch &&
+        statusMatch &&
+        assigneeMatch
       );
     });
-  }, [tasks, query, severity, issueType, sourceSystem, status]);
+  }, [tasks, query, severity, issueType, sourceSystem, status, assignee]);
 
   const totalPages = Math.ceil(filteredData.length / rowsPerPage);
 
@@ -190,47 +189,36 @@ export default function MyTaskTable({ tasks = [], onOpenTask }) {
                 <th className="p-2 text-[12px] font-semibold text-[#24324B]">
                   Severity
                 </th>
-
                 <th className="p-2 text-[12px] font-semibold text-[#24324B]">
                   Issue ID
                 </th>
-
                 <th className="p-2 text-[12px] font-semibold text-[#24324B]">
                   Customer
                 </th>
-
                 <th className="p-2 text-[12px] font-semibold text-[#24324B]">
                   Why this needs attention
                 </th>
-
                 <th className="p-2 text-[12px] font-semibold text-[#24324B]">
                   Issue Type
                 </th>
-
                 <th className="p-2 text-[12px] font-semibold text-[#24324B]">
                   Source System
                 </th>
-
                 <th className="p-2 text-[12px] font-semibold text-[#24324B]">
                   Assigned Date
                 </th>
                 <th className="p-2 text-[12px] font-semibold text-[#24324B]">
                   Assigned To
                 </th>
-
                 <th className="p-2 text-[12px] font-semibold text-[#24324B]">
                   Age
                 </th>
-
                 <th className="p-2 text-[12px] font-semibold text-[#24324B]">
                   Status
                 </th>
-
                 <th className="p-2 text-[12px] font-semibold text-[#24324B]">
                   Action
                 </th>
-
-                {/* <th className="px-5 py-4"></th> */}
               </tr>
             </thead>
 
@@ -242,7 +230,7 @@ export default function MyTaskTable({ tasks = [], onOpenTask }) {
                 >
                   <td className="p-2">
                     <span
-                      className={`inline-flex items-center gap-1 rounded-full px-3 py-1 text-xs font-semibold ${getSeverityStyle(
+                      className={`inline-flex items-center gap-1 rounded-full px-3 py-3 text-xs font-semibold ${getSeverityStyle(
                         row.severity,
                       )}`}
                     >
@@ -255,9 +243,7 @@ export default function MyTaskTable({ tasks = [], onOpenTask }) {
                     {row.issue_id}
                   </td>
 
-                  <td className="p-2 text-[#24324B]">
-                    {row.customer_name}
-                  </td>
+                  <td className="p-2 text-[#24324B]">{row.customer_name}</td>
 
                   <td className="max-w-[250px] p-2">
                     <div className="line-clamp-2 text-[#555]">{row.why}</div>
@@ -316,13 +302,6 @@ export default function MyTaskTable({ tasks = [], onOpenTask }) {
                       {row.status === "In Progress" ? "Continue" : "Start"}
                     </button>
                   </td>
-
-                  {/* <td className="px-5 py-5">
-                    <MoreVertical
-                      size={18}
-                      className="cursor-pointer text-[#0B63F6]"
-                    />
-                  </td> */}
                 </tr>
               ))}
             </tbody>
@@ -361,7 +340,6 @@ export default function MyTaskTable({ tasks = [], onOpenTask }) {
                 >
                   Prev
                 </button>
-
                 {Array.from({ length: totalPages }, (_, index) => index + 1)
                   .slice(
                     Math.max(currentPage - 3, 0),

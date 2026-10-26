@@ -43,15 +43,15 @@ export default function IssuesDetailsHeader({ issueDetailData }) {
           ["Age", `${issueDetailData?.age_days || 0}d`],
         ].map(([label, value]) => (
           <div key={label} className="min-w-0">
-            <p className="text-[8px] text-slate-400">{label}</p>
-            <div className="mt-1 truncate text-[9px] font-semibold text-slate-700">
+            <p className="text-[12px] text-slate-400">{label}</p>
+            <div className="mt-1 truncate text-[12px] font-semibold text-slate-700">
               {value}
             </div>
           </div>
         ))}
       </div>
       <div className="mt-2 flex justify-end">
-        <span className="inline-flex items-center gap-1 rounded bg-blue-50 px-2 py-1 text-[8px] font-semibold text-blue-600">
+        <span className="inline-flex items-center gap-1 rounded bg-blue-50 px-2 py-1 text-[10px] font-semibold text-blue-600">
           <ClipboardCheck size={10} /> Deterministic DQ Rule Result
         </span>
       </div>
