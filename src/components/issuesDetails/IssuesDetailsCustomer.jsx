@@ -156,15 +156,14 @@ export default function IssuesDetailsCustomer({ issueData }) {
               <dt className="text-slate-500 mr-2">Source System</dt>
 
               <dd>{issueData.source_system || "-"}</dd>
-
-              <dt className="text-slate-500 mr-2">Last Updated</dt>
-              <dd>{issueData.assigned_date || "-"}</dd>
               <dt className="text-slate-500 mr-2">Root Cause</dt>
               <dd>{issueData.root_cause || "-"}</dd>
               <dt className="text-slate-500 mr-2"> Business Impact</dt>
               <dd>{issueData.business_impact || "-"}</dd>
               <dt className="text-slate-500 mr-2">Suggested Owner</dt>
               <dd>{issueData.suggested_owner || "-"}</dd>
+              <dt className="text-slate-500 mr-2">Last Updated</dt>
+              <dd>{issueData.last_updated || "-"}</dd>
             </dl>
           </div>
 
@@ -180,9 +179,9 @@ export default function IssuesDetailsCustomer({ issueData }) {
                 </p>
               </div>
 
-              <span className="text-[12px] font-semibold text-blue-600">
+              {/* <span className="text-[12px] font-semibold text-blue-600">
                 {issueData.proposed_by || ""}
-              </span>
+              </span> */}
             </div>
 
             <dl className="grid grid-cols-[100px_1fr] gap-y-2 text-[12px]">
