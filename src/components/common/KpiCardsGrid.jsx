@@ -41,14 +41,13 @@ export default function KpiCardsGrid({
       }}
     >
      {Array.isArray(items) &&
-  items.map((item) => {
+  items.map((item, index) => {
         const Icon = item.icon;
         return (
           <KpiTooltip
-            key={item.title}
-            invoiceCount={item.invoiceCount}
-            invoiceValue={item.invoiceValue}
-          >
+  key={`${item.title}-${index}`}
+  tooltipData={item.tooltipData}
+>
             <div
               className="
                 rounded-[10px]
@@ -87,9 +86,8 @@ export default function KpiCardsGrid({
 
               {item.distribution ? (
                 <div className="flex flex-col gap-1">
-                  {item.distribution.map((row) => (
-                    <div
-                      key={row.label}
+                  {item.distribution.map((row, index) => (
+                     <div key={`${row.label}-${index}`}
                       className="flex items-center justify-between text-[11px]"
                     >
                       <div className="flex items-center gap-1.5">

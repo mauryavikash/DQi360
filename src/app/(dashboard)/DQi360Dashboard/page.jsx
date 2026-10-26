@@ -19,7 +19,7 @@ import { EmptyState } from "@/components/common/EmptyState";
 import { getDashboard } from "@/app/lib/api";
 
 const KPI_PRESENTATION = {
-  overall_dq_index: { title: "Overall DQ Index", icon: BadgeCheck, iconBg: "#e7f8ee", iconColor: "#16a34a" },
+  dq_index: { title: "Overall DQ Index", icon: BadgeCheck, iconBg: "#e7f8ee", iconColor: "#16a34a" },
   total_records: { title: "Total Customer Records", icon: Database, iconBg: "#e8f1ff", iconColor: "#2563eb" },
   open_issues: { title: "Open Issues", icon: ClipboardList, iconBg: "#fff0f1", iconColor: "#ef476f" },
   critical_issues: { title: "Critical Issues", icon: AlertTriangle, iconBg: "#fff1f2", iconColor: "#ef476f" },
@@ -66,29 +66,43 @@ function formatKpiValue(key, value) {
   return Number(value).toLocaleString();
 }
 
-function normalizeKpis(kpis = {}, momComparison = {}) {
-  return Object.entries(KPI_PRESENTATION)
-    .filter(([key]) => kpis[key] !== undefined && kpis[key] !== null)
-    .map(([key, presentation]) => {
-      const isDqIndex = key === "overall_dq_index";
-      const isOpenIssues = key === "open_issues";
-      const isCriticalIssues = key === "critical_issues";
-      const change = isDqIndex
-        ? momComparison.dq_index_change
-        : isOpenIssues
-          ? momComparison.current_issues - momComparison.previous_issues
-          : isCriticalIssues
-            ? momComparison.current_critical - momComparison.previous_critical
-            : undefined;
+function normalizeKpis(kpiCards = []) {
+  return kpiCards.map((item) => {
+    const presentation =
+      KPI_PRESENTATION[item.key] || {};
 
-      return {
-        ...presentation,
-        value: formatKpiValue(key, kpis[key]),
-        change: change === undefined ? undefined : Math.abs(change).toLocaleString(),
-        positive: isDqIndex ? change >= 0 : change <= 0,
-        comparison: change === undefined ? undefined : "vs. previous period",
-      };
-    });
+    return {
+      ...presentation,
+
+      title:
+        presentation.title ||
+        item.label,
+
+      value: item.value,
+
+      change:
+        item.delta_pct !== undefined
+          ? `${Math.abs(item.delta_pct)}%`
+          : undefined,
+
+      positive:
+        item.direction === "up",
+
+      comparison:
+        item.comparison_label,
+
+      // action:
+      //   item.link_label,
+
+      tooltipData: {
+        Current: item.value,
+        Previous: item.previous,
+        Delta: item.delta,
+        // "Delta %": item.delta_pct,
+        // Comparison: item.comparison_label,
+      },
+    };
+  });
 }
 
 function mapDashboardData(data) {
@@ -108,7 +122,9 @@ function mapDashboardData(data) {
   }));
 
   return {
-    kpis: normalizeKpis(data?.kpis, data?.momComparison),
+    kpis: normalizeKpis(
+  data?.kpiCards || [],
+),
     chartData: { trendData, severityData, domainScores },
     issuesData: {
       sourceSystemData: (data?.bySource ?? []).map((item) => ({

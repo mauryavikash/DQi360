@@ -1,10 +1,5 @@
 "use client";
-import {
-  AlertTriangle,
-  CheckCircle2,
-  Clock3,
-  FileText,
-} from "lucide-react";
+import { AlertTriangle, CheckCircle2, Clock3, FileText } from "lucide-react";
 
 import KpiCardsGrid from "../common/KpiCardsGrid";
 
@@ -16,9 +11,12 @@ export default function DQi360KpiCard({ summary }) {
       icon: FileText,
       iconBg: "#EFF6FF",
       iconColor: "#2563EB",
-
-      invoiceCount: summary?.totalIssueCount,
-      invoiceValue: summary?.totalIssueValue,
+      tooltipData: {
+        "Total Issues": summary?.totalIssues ?? 0,
+        "Open Issues": summary?.openIssues ?? 0,
+        "Resolved Issues": summary?.resolvedIssues ?? 0,
+        "Pending Issues": summary?.pendingIssues ?? 0,
+      },
     },
     {
       title: "Open Issues",
@@ -26,9 +24,12 @@ export default function DQi360KpiCard({ summary }) {
       icon: AlertTriangle,
       iconBg: "#FEF3C7",
       iconColor: "#D97706",
-
-      invoiceCount: summary?.openIssueCount,
-      invoiceValue: summary?.openIssueValue,
+      tooltipData: {
+        "Total Issues": summary?.totalIssues ?? 0,
+        "Open Issues": summary?.openIssues ?? 0,
+        "Resolved Issues": summary?.resolvedIssues ?? 0,
+        "Pending Issues": summary?.pendingIssues ?? 0,
+      },
     },
     {
       title: "Resolved",
@@ -36,9 +37,12 @@ export default function DQi360KpiCard({ summary }) {
       icon: CheckCircle2,
       iconBg: "#ECFDF5",
       iconColor: "#059669",
-
-      invoiceCount: summary?.resolvedIssueCount,
-      invoiceValue: summary?.resolvedIssueValue,
+      tooltipData: {
+        "Total Issues": summary?.totalIssues ?? 0,
+        "Open Issues": summary?.openIssues ?? 0,
+        "Resolved Issues": summary?.resolvedIssues ?? 0,
+        "Pending Issues": summary?.pendingIssues ?? 0,
+      },
     },
     {
       title: "Pending",
@@ -47,15 +51,14 @@ export default function DQi360KpiCard({ summary }) {
       iconBg: "#FFF1F2",
       iconColor: "#F43F5E",
 
-      invoiceCount: summary?.pendingIssueCount,
-      invoiceValue: summary?.pendingIssueValue,
+      tooltipData: {
+        "Total Issues": summary?.totalIssues ?? 0,
+        "Open Issues": summary?.openIssues ?? 0,
+        "Resolved Issues": summary?.resolvedIssues ?? 0,
+        "Pending Issues": summary?.pendingIssues ?? 0,
+      },
     },
   ];
 
-  return (
-    <KpiCardsGrid
-      items={kpiItems}
-      variant="default"
-    />
-  );
+  return <KpiCardsGrid items={kpiItems} variant="default" />;
 }

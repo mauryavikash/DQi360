@@ -11,6 +11,7 @@ const KPI_PRESENTATION = [
   ["in_progress", "In Progress", "Tasks in progress", "progress"],
   ["awaiting_approval", "Awaiting Approval", "Read-only view", "approval"],
   ["approved", "Approved", "Read-only view", "approved"],
+  ["total", "Total Tasks", "Total team workload", "todo"],
 ];
 
 function formatDate(value) {
@@ -138,7 +139,7 @@ const response = await getMyTaskDetails(
         title,
         subtitle,
         type,
-        value: Number(myTaskApiData?.summary?.[key] ?? 0),
+        value: Number(myTaskApiData?.team_summary?.[key] ?? 0),
       })),
     [myTaskApiData],
   );
