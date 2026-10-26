@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import {
   Search,
   Filter,
@@ -69,6 +69,12 @@ export default function IssuesTable({ data = [], filters = {}, onReview }) {
   const [assignName, setAssignName] = useState("");
   const [assignStatus, setAssignStatus] = useState("In Progress");
   const [isSaving, setIsSaving] = useState(false);
+  const [userRole, setUserRole] = useState("");
+  useEffect(() => {
+    const user = JSON.parse(sessionStorage.getItem("user") || "{}");
+
+    setUserRole(user?.role || "");
+  }, []);
   const severityColors = {
     Critical: "bg-[#FDECEC] text-[#D92D20]",
     High: "bg-[#FDECEC] text-[#F04438]",
@@ -407,19 +413,21 @@ export default function IssuesTable({ data = [], filters = {}, onReview }) {
                     </button>
                   </td>
 
-                  <td className="p-2">
-                    <button
-                      onClick={() => {
-                        setAssignName("");
-                        setAssignStatus("In Progress");
-                        setSelectedIssueId(item.issueId);
-                        setShowAssignPopup(true);
-                      }}
-                      className="h-[24px] min-w-[62px] cursor-pointer rounded-md border border-[#3B82F6] text-[12px] font-semibold text-[#155EEF] hover:bg-blue-50"
-                    >
-                      Assign
-                    </button>
-                  </td>
+                  {userRole === "owner" && (
+                    <td className="p-2">
+                      <button
+                        onClick={() => {
+                          setAssignName("");
+                          setAssignStatus("In Progress");
+                          setSelectedIssueId(item.issueId);
+                          setShowAssignPopup(true);
+                        }}
+                        className="h-[24px] min-w-[62px] cursor-pointer rounded-md border border-[#3B82F6] text-[12px] font-semibold text-[#155EEF] hover:bg-blue-50"
+                      >
+                        Assign
+                      </button>
+                    </td>
+                  )}
                 </tr>
               ))}
             </tbody>

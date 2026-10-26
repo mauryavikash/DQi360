@@ -54,11 +54,7 @@ export default function MyTaskPage() {
 
       const userEmail = sessionUser?.email;
 
-const response = await getMyTaskDetails(
-  userEmail,
-  task.issueId,
-  action
-);
+      const response = await getMyTaskDetails(userEmail, task.issueId, action);
 
       setSelectedTask(response);
       setShowDetails(true);
@@ -129,10 +125,7 @@ const response = await getMyTaskDetails(
     };
   }, []);
 
-  const tasks = useMemo(
-  () => myTaskApiData?.tasks ?? [],
-  [myTaskApiData]
-);
+  const tasks = useMemo(() => myTaskApiData?.tasks ?? [], [myTaskApiData]);
   const summary = useMemo(
     () =>
       KPI_PRESENTATION.map(([key, title, subtitle, type]) => ({
@@ -155,7 +148,7 @@ const response = await getMyTaskDetails(
       data-has-error={Boolean(error)}
     >
       <div className="mx-auto max-w-[1600px]">
-        <header className="flex items-start justify-between">
+        {/* <header className="flex items-start justify-between">
           <div>
             <h1 className="text-[18px] font-bold leading-5 text-slate-800">
               My Tasks
@@ -165,15 +158,31 @@ const response = await getMyTaskDetails(
               Assigned customer master data quality work
             </p>
           </div>
-        </header>
+        </header> */}
+        {!showDetails && (
+          <header className="flex items-start justify-between">
+            <div>
+              <h1 className="text-[18px] font-bold leading-5 text-slate-800">
+                My Tasks
+              </h1>
 
+              <p className="mt-0.5 text-[12px] text-slate-500">
+                Assigned customer master data quality work
+              </p>
+            </div>
+          </header>
+        )}
         {showDetails ? (
           <MyTaskDetail task={selectedTask} onBack={handleBack} />
         ) : (
           <>
             <MyTaskKpis summary={summary} />
 
-            <MyTaskTable tasks={tasks} filters={myTaskApiData?.filters} onOpenTask={handleOpenTask} />
+            <MyTaskTable
+              tasks={tasks}
+              filters={myTaskApiData?.filters}
+              onOpenTask={handleOpenTask}
+            />
           </>
         )}
       </div>

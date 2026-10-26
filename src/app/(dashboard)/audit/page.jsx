@@ -142,7 +142,7 @@ export default function AuditPage() {
               Audit
             </h1>
 
-            <p className="mt-0.5 text-[10px] text-slate-500">
+            <p className="mt-1 text-[12px] text-slate-500">
               Trace customer master data changes, data quality actions and
               governance decisions
             </p>
