@@ -281,7 +281,7 @@ const severityClass =
                   const toastId = toast.loading("Submitting proposal...");
                   try {
                     setIsSubmitting(true);
-                    await submitMyTaskProposal(issueData.issue_id, {
+                    await submitMyTaskProposal(issue.issue_id, {
                       proposed_value: proposedValue,
                       comment,
                       performed_by:
