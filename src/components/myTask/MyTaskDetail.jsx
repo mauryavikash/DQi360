@@ -162,6 +162,12 @@ const severityClass =
                   <div key={i}>• {e}</div>
                 ))}
               </div>
+              <div className="text-slate-500">AI Confidence</div>
+              <div>{whyFlagged.ai_confidence}</div>
+              <div className="text-slate-500">Confidence Basis</div>
+              <div>{whyFlagged.confidence_basis}</div>
+              <div className="text-slate-500">Confidence Label</div>
+              <div>{whyFlagged.confidence_label}</div>
               <div className="text-slate-500">Rule Version</div>
               <div>{whyFlagged.rule_version}</div>
             </div>
@@ -208,10 +214,11 @@ const severityClass =
                     value={proposedPanel.evidence_status}
                   />
                   <Row label="Source" value={proposedPanel.source} />
+                  <Row label="Rationale" value={proposedPanel.rationale_template} />
                 </div>
-                <div className="mt-3 text-[12px] font-medium text-green-600">
+                {/* <div className="mt-3 text-[12px] font-medium text-green-600">
                   ✅ Steward confirmation required
-                </div>
+                </div> */}
               </div>
             </div>
           </div>

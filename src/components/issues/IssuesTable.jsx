@@ -91,7 +91,9 @@ export default function IssuesTable({ data = [], filters = {}, onReview }) {
     ...new Set(data.map((item) => item.severity)),
   ];
 
-  const categoryOptions = [...new Set(data.map((item) => item.category))];
+  const categoryOptions = filters.categories ?? [
+  ...new Set(data.map((item) => item.category).filter(Boolean)),
+];
 
   const sourceOptions = filters.source_systems ?? [
     ...new Set(data.map((item) => item.sourceSystem)),
