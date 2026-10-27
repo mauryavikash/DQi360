@@ -311,7 +311,7 @@ export default function IssuesTable({ data = [], filters = {}, onReview }) {
 
           <button
             onClick={handleClearAll}
-            className="ml-auto mr-2 text-[#1565F9] text-[12px] font-medium"
+            className="mt-1 cursor-pointer text-[#1565F9] text-[12px] font-medium"
           >
             Clear all
           </button>

@@ -351,7 +351,7 @@ export default function MyTaskDetail({ task, onBack }) {
                   }
                 }}
                 disabled={!proposedValue || submitted || isSubmitting}
-                className="rounded-md bg-[#1565F9] px-4 py-2 text-[12px] font-semibold text-white disabled:cursor-not-allowed disabled:bg-slate-300"
+                className="rounded-md cursor-pointer bg-[#1565F9] px-4 py-2 text-[12px] font-semibold text-white disabled:cursor-not-allowed disabled:bg-slate-300"
               >
                 {isSubmitting
                   ? "Submitting..."
@@ -418,7 +418,7 @@ export default function MyTaskDetail({ task, onBack }) {
                   <button
                   type="button"
                     onClick={() => setShowCustomerPopup(true)}
-                  className="rounded bg-[#1565F9] px-3 py-1 text-[12px] font-semibold text-white"
+                  className="rounded cursor-pointer bg-[#1565F9] px-3 py-1 text-[12px] font-semibold text-white"
                   >
                     View Documents
                   </button>

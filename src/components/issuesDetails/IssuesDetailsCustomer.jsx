@@ -333,7 +333,7 @@ export default function IssuesDetailsCustomer({ issueData }) {
               }
             }}
             disabled={!proposedValue || submitted || isSubmitting}
-            className="rounded-md bg-[#1565F9] px-4 py-2 text-[12px] font-semibold text-white disabled:cursor-not-allowed disabled:bg-slate-300"
+            className="rounded-md cursor-pointer bg-[#1565F9] px-4 py-2 text-[12px] font-semibold text-white disabled:cursor-not-allowed disabled:bg-slate-300"
           >
             {isSubmitting
               ? "Submitting..."

@@ -98,29 +98,11 @@ export default function IssuesCustomerContext({ issueData }) {
 
             <dd>
               <div className="flex flex-wrap items-center gap-2">
-                {/* {existingDocuments.length > 0 ? (
-                  existingDocuments
-                    .slice(0, 2)
-                    .map((doc, index) => (
-                      <span
-                        key={index}
-                        className="rounded bg-blue-100 px-2 py-1 text-[12px] font-semibold text-blue-700"
-                      >
-                        {doc?.document_name ||
-                          doc?.name ||
-                          "-"}
-                      </span>
-                    ))
-                ) : (
-                  <span className="rounded bg-blue-100 px-2 py-1 text-[12px] font-semibold text-blue-700">
-                    -
-                  </span>
-                )} */}
-
+                
                 <button
                   type="button"
                   onClick={() => setShowDocuments(true)}
-                  className="rounded bg-[#1565F9] px-3 py-1 text-[12px] font-semibold text-white"
+                  className="rounded cursor-pointer bg-[#1565F9] px-3 py-1 text-[12px] font-semibold text-white"
                 >
                   View Documents
                 </button>
