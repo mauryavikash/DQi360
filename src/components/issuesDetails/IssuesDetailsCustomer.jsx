@@ -147,7 +147,7 @@ export default function IssuesDetailsCustomer({ issueData }) {
               <dt className="text-slate-500 mr-2">Current Value</dt>
               <dd>{issueData.current_value || "-"}</dd>
 
-              <dt className="text-slate-500 mr-2">Status</dt>
+              <dt className="text-slate-500 mr-2">Validation Status</dt>
 
               <dd className="font-semibold text-red-600">
                 {issueData.status || "-"}

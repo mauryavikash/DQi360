@@ -1,7 +1,14 @@
 "use client";
 
 import { useMemo, useState, useEffect } from "react";
-import { Search, Filter, ChevronDown, TriangleAlert } from "lucide-react";
+import {
+  Search,
+  Filter,
+  ChevronDown,
+  TriangleAlert,
+  ChevronLeft,
+  ChevronRight,
+} from "lucide-react";
 
 export default function MyTaskTable({ tasks = [], filters = {}, onOpenTask }) {
   const [query, setQuery] = useState("");
@@ -359,16 +366,16 @@ export default function MyTaskTable({ tasks = [], filters = {}, onOpenTask }) {
                 {filteredData.length}
               </span>
             </div>
-
             {totalPages > 1 && (
               <div className="flex items-center gap-2">
                 <button
                   disabled={currentPage === 1}
                   onClick={() => setCurrentPage((prev) => prev - 1)}
-                  className="rounded-lg border px-3 py-2 disabled:opacity-40"
+                  className="w-8 h-8 rounded-lg border flex items-center justify-center"
                 >
-                  Prev
+                  <ChevronLeft size={20} />
                 </button>
+
                 {Array.from({ length: totalPages }, (_, index) => index + 1)
                   .slice(
                     Math.max(currentPage - 3, 0),
@@ -378,11 +385,13 @@ export default function MyTaskTable({ tasks = [], filters = {}, onOpenTask }) {
                     <button
                       key={page}
                       onClick={() => setCurrentPage(page)}
-                      className={`h-10 min-w-[40px] rounded-lg ${
-                        currentPage === page
-                          ? "bg-blue-600 text-white"
-                          : "border border-slate-300"
-                      }`}
+                      className={`h-8 w-8 rounded-lg text-sm
+            ${
+              currentPage === page
+                ? "bg-[#2563EB] text-white "
+                : "border border-[#D0D5DD] text-[#2563EB]"
+            }
+          `}
                     >
                       {page}
                     </button>
@@ -391,9 +400,9 @@ export default function MyTaskTable({ tasks = [], filters = {}, onOpenTask }) {
                 <button
                   disabled={currentPage === totalPages}
                   onClick={() => setCurrentPage((prev) => prev + 1)}
-                  className="rounded-lg border px-3 py-2 disabled:opacity-40"
+                  className="w-8 h-8 rounded-lg border flex items-center justify-center"
                 >
-                  Next
+                  <ChevronRight size={20} />
                 </button>
               </div>
             )}

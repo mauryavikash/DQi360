@@ -47,40 +47,6 @@ export default function DQi360Chart({ chartData }) {
 
         <div className="h-[280px]">
           <ResponsiveContainer width="100%" height="100%">
-            {/* <LineChart
-              data={trendData}
-              margin={{ top: 10, right: 10, left: -20, bottom: 0 }}
-            >
-              <XAxis
-                dataKey="month"
-                tick={{ fontSize: 8, fill: "#64748B" }}
-                tickLine={false}
-                axisLine={false}
-              />
-
-              <YAxis
-                domain={[0, 100]}
-                ticks={[0, 20, 40, 60, 80, 100]}
-                tick={{ fontSize: 8, fill: "#64748B" }}
-                tickLine={false}
-                axisLine={false}
-                width={28}
-              />
-
-              <Line
-                type="monotone"
-                dataKey="value"
-                stroke="#1664E8"
-                strokeWidth={2}
-                dot={{
-                  r: 3,
-                  fill: "#1664E8",
-                }}
-              />
-              <ReferenceLine y={60} stroke="#22C55E" strokeDasharray="4 4" />
-              <ReferenceLine y={85} stroke="#94A3B8" strokeDasharray="4 4" />
-            </LineChart> */}
-
             <LineChart
               data={trendData}
               margin={{ top: 20, right: 20, left: 0, bottom: 20 }}
@@ -178,38 +144,63 @@ export default function DQi360Chart({ chartData }) {
         </div>
 
         <div className="flex items-center justify-between">
-          <div className="relative h-[320px] w-[320px]">
+          <div className="relative h-[320px] w-[320px] z-10">
             <ResponsiveContainer width="100%" height="100%">
               <PieChart>
                 <Tooltip
-                  formatter={(value) => [value.toLocaleString(), "Issues"]}
-                  contentStyle={{
+                  cursor={false}
+                  wrapperStyle={{
+                    zIndex: 9999,
+                    background: "#FFFFFF",
                     borderRadius: "8px",
-                    border: "1px solid #E2E8F0",
-                    fontSize: "12px",
+                  }}
+                  content={({ active, payload }) => {
+                    if (!active || !payload?.length) return null;
+
+                    const item = payload[0]?.payload;
+
+                    return (
+                      <div
+                        className="rounded-lg border border-[#E2E8F0] bg-white p-3 shadow-xl"
+                        style={{
+                          zIndex: 9999,
+                          position: "relative",
+                        }}
+                      >
+                        <div className="font-semibold text-[#22345B]">
+                          {item.name}
+                        </div>
+                        <div className="text-[#22345B]">
+                          {item.value?.toLocaleString()} ({item.percent})
+                        </div>
+                      </div>
+                    );
                   }}
                 />
+
                 <Pie
                   data={severityData}
                   dataKey="value"
+                  nameKey="name"
                   innerRadius={70}
                   outerRadius={112}
                   paddingAngle={0}
                   stroke="none"
+                  isAnimationActive={false}
                 >
                   {severityData.map((item) => (
-                    <Cell key={item.name} fill={item.color} />
+                    <Cell key={item.name} fill={item.color} cursor="pointer" />
                   ))}
                 </Pie>
               </PieChart>
             </ResponsiveContainer>
 
-            <div className="absolute inset-0 flex flex-col items-center justify-center">
-              <div className="text-[16px] font-bold leading-none text-[#22345B]">
+            <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center">
+              <div className="text-[18px] font-bold leading-none text-[#22345B]">
                 {openIssueTotal.toLocaleString()}
               </div>
 
-              <div className="mt-2 text-[12px] text-[#64748B]">Open Issues</div>
+              <div className="mt-2 text-[14px] text-[#64748B]">Open Issues</div>
             </div>
           </div>
 
