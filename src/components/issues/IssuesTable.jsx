@@ -476,7 +476,7 @@ export default function IssuesTable({ data = [], filters = {}, onReview }) {
             </span>
           </div>
 
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2">
             <button
               disabled={visiblePage === 1}
               onClick={() => setCurrentPage(visiblePage - 1)}
@@ -561,6 +561,10 @@ export default function IssuesTable({ data = [], filters = {}, onReview }) {
                 <option>Open</option>
                 <option>Re-opened</option>
                 <option>In Progress</option>
+                <option>Awaiting Approval</option>
+                <option>Approved</option>
+                <option>Rejected</option>
+                <option>Closed</option>
               </select>
             </div>
 

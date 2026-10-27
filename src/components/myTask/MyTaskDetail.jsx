@@ -9,6 +9,7 @@ import {
   Upload,
   AlertTriangle,
   ClipboardCheck,
+  CheckCircle2,
 } from "lucide-react";
 import { toast } from "sonner";
 import { submitMyTaskProposal } from "@/app/lib/api";
@@ -190,8 +191,14 @@ export default function MyTaskDetail({ task, onBack }) {
             </h2>
             <div className="grid gap-4 md:grid-cols-2">
               <div className="rounded-lg border border-red-200 bg-red-50 p-4">
-                <div className="font-semibold text-red-600">Current Value</div>
-                <div className="mt-3 space-y-2 text-[12px]">
+                <div className="mb-3 flex items-center gap-2">
+                  <AlertCircle size={14} className="text-red-600" />
+
+                  <p className="text-[12px] font-bold text-red-600">
+                    Current Value
+                  </p>
+                </div>
+                <div className="mt-3 space-y-2 text-[12px] break-words">
                   <Row label="Field" value={currentValuePanel.field} />
                   <Row
                     label="Current Value"
@@ -199,24 +206,19 @@ export default function MyTaskDetail({ task, onBack }) {
                   />
                   <Row
                     label="Validation Status"
-                    value={currentValuePanel.validation_status}
+                    value={
+                      <span className="text-red-600 font-medium">
+                        {currentValuePanel.validation_status}
+                      </span>
+                    }
                   />
                   <Row
                     label="Source System"
                     value={currentValuePanel.source_system}
                   />
-                  <Row
-                    label="Root Cause"
-                    value={issue.root_cause}
-                  />
-                  <Row
-                    label="Business Impact"
-                    value={issue.business_impact}
-                  />
-                  <Row
-                    label="Suggested Owner"
-                    value={issue.suggested_owner}
-                  />
+                  <Row label="Root Cause" value={issue.root_cause} />
+                  <Row label="Business Impact" value={issue.business_impact} />
+                  <Row label="Suggested Owner" value={issue.suggested_owner} />
                   <Row
                     label="Last Updated"
                     value={currentValuePanel.last_updated}
@@ -225,26 +227,32 @@ export default function MyTaskDetail({ task, onBack }) {
               </div>
 
               <div className="rounded-lg border border-blue-200 bg-blue-50 p-4">
-                <div className="font-semibold text-blue-600">
-                  Proposed Value
+                <div className="flex items-center gap-2">
+                  <CheckCircle2 size={14} className="text-blue-600" />
+                  <p className="text-[12px] font-bold text-blue-600">
+                    Proposed Value
+                  </p>
                 </div>
-                <div className="mt-3 space-y-2 text-[12px]">
+                <div className="mt-3 space-y-2 text-[12px] break-words">
                   <Row label="Field" value={proposedPanel.field} />
-                  <Row
-                    label="Proposed Value"
-                    value={issue.suggested_value}
-                  />
-
-                  <Row
-                    label="Evidence Status"
-                    value={proposedPanel.evidence_status}
-                  />
+                  <Row label="Proposed Value" value={issue.suggested_value} />
                   <Row
                     label="Remediation Rationale"
-                    value={issue.rationale_template}
+                    value={
+                      <span className="text-green-600 font-medium">
+                        {issue.rationale_template}
+                      </span>
+                    }
+                  />
+                  <Row
+                    label="Evidence Status"
+                    value={
+                      <span className="text-amber-600 font-medium">
+                        {proposedPanel.evidence_status}
+                      </span>
+                    }
                   />
                   <Row label="Source" value={proposedPanel.source} />
-                  
                 </div>
                 {/* <div className="mt-3 text-[12px] font-medium text-green-600">
                   ✅ Steward confirmation required
@@ -416,9 +424,9 @@ export default function MyTaskDetail({ task, onBack }) {
 
                 <div>
                   <button
-                  type="button"
+                    type="button"
                     onClick={() => setShowCustomerPopup(true)}
-                  className="rounded cursor-pointer bg-[#1565F9] px-3 py-1 text-[12px] font-semibold text-white"
+                    className="rounded cursor-pointer bg-[#1565F9] px-3 py-1 text-[12px] font-semibold text-white"
                   >
                     View Documents
                   </button>
