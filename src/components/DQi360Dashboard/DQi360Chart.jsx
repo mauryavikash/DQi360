@@ -36,7 +36,7 @@ export default function DQi360Chart({ chartData }) {
       {/* ==================== DATA QUALITY INDEX TREND ==================== */}
       <Card>
         <div className="mb-3 flex items-center justify-between">
-          <h2 className="text-[11px] font-bold text-[#22345B]">
+          <h2 className="text-[12px] font-bold text-[#22345B]">
             Data Quality Index Trend
           </h2>
 
@@ -134,8 +134,8 @@ export default function DQi360Chart({ chartData }) {
       {/* ==================== OPEN ISSUES ==================== */}
       <Card>
         <div className="mb-3 flex items-center justify-between">
-          <h2 className="text-[14px] font-semibold text-[#22345B]">
-            Open Issues by Severity
+          <h2 className="text-[12px] font-bold text-[#22345B]">
+            Open Cases by Priority
           </h2>
 
           {/* <button className="text-[9px] font-semibold text-[#1664E8]">
@@ -200,7 +200,7 @@ export default function DQi360Chart({ chartData }) {
                 {openIssueTotal.toLocaleString()}
               </div>
 
-              <div className="mt-2 text-[14px] text-[#64748B]">Open Issues</div>
+              <div className="mt-2 text-[14px] text-[#64748B]">Open Cases</div>
             </div>
           </div>
 
@@ -230,7 +230,7 @@ export default function DQi360Chart({ chartData }) {
       {/* ==================== DOMAIN SCORE ==================== */}
       <Card>
         <div className="mb-5">
-          <h2 className="text-[11px] font-bold text-[#22345B]">
+          <h2 className="text-[12px] font-bold text-[#22345B]">
             Domain Score Breakdown
           </h2>
         </div>

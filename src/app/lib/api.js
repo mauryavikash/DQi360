@@ -31,16 +31,16 @@ export const AUDIT_URL = `${API_BASE_URL}/api/dq/audit-screen?page=1&per_page=al
 // export const COPILOT_CHAT_URL = `${API_BASE_URL}/v1/copilot/chat`;
 export const LOGIN_URL = `${API_BASE_URL}/auth/login`;
 export const REGISTER_URL = `${API_BASE_URL}/auth/register`;
-// export const AGENT_STATUS_URL = `${API_BASE_URL}/agent-status`;
+export const AGENT_STATUS_URL = `${API_BASE_URL}/header-agents`;
 // export const NOTIFICATION_URL = `${API_BASE_URL}/notification`;
 
 let dashboardRequest;
 let issuesRequest;
 const myTasksRequests = new Map();
 let auditRequest;
-// let agentStatusRequest;
+let agentStatusRequest;
 // let notificationsRequest;
-// let agentStatusCache;
+let agentStatusCache;
 // let notificationsCache;
 const LIVE_STATUS_CACHE_TTL_MS = 15000;
 const NOTIFICATION_CACHE_TTL_MS = 15000;
@@ -66,11 +66,14 @@ axiosInstance.interceptors.request.use(
         console.debug("[Databricks API] Request", {
           method: config.method?.toUpperCase(),
           url: getRequestUrl(config),
-          hasAccessToken: Boolean(token) && !isAuthenticationRequest,
+          hasAccessToken:
+            Boolean(token) &&
+            !isAuthenticationRequest &&
+            !config.skipStoredAccessToken,
         });
       }
 
-      if (token && !isAuthenticationRequest) {
+      if (token && !isAuthenticationRequest && !config.skipStoredAccessToken) {
         config.headers.Authorization = `Bearer ${token}`;
       }
     }
@@ -95,34 +98,42 @@ axiosInstance.interceptors.response.use(
     return Promise.reject(error);
   },
 );
-// export async function getAgentStatus() {
-//   const now = Date.now();
+export async function getAgentStatus() {
+  const now = Date.now();
 
-//   if (
-//     agentStatusCache &&
-//     now - agentStatusCache.fetchedAt < LIVE_STATUS_CACHE_TTL_MS
-//   ) {
-//     return agentStatusCache.data;
-//   }
+  if (
+    agentStatusCache &&
+    now - agentStatusCache.fetchedAt < LIVE_STATUS_CACHE_TTL_MS
+  ) {
+    return agentStatusCache.data;
+  }
 
-//   if (!agentStatusRequest) {
-//     agentStatusRequest = axiosInstance
-//       .get("agent-status")
-//       .then((response) => {
-//         agentStatusCache = {
-//           data: response.data,
-//           fetchedAt: Date.now(),
-//         };
+  if (!agentStatusRequest) {
+    // agentStatusRequest = axiosInstance
+    //   .get("api/dq/header-agents")
+    agentStatusRequest = axiosInstance
+  .get("api/dq/header-agents", {
+    headers: {
+      "X-API-Key": "wc-agent-prod-key-001",
+    },
+    skipStoredAccessToken: true,
+  })
 
-//         return response.data;
-//       })
-//       .finally(() => {
-//         agentStatusRequest = undefined;
-//       });
-//   }
+      .then((response) => {
+        agentStatusCache = {
+          data: response.data,
+          fetchedAt: Date.now(),
+        };
 
-//   return agentStatusRequest;
-// }
+        return response.data;
+      })
+      .finally(() => {
+        agentStatusRequest = undefined;
+      });
+  }
+
+  return agentStatusRequest;
+}
 // export async function getNotifications() {
 //   const now = Date.now();
 
@@ -185,7 +196,7 @@ export async function registerUser(email, name, password) {
 export async function getDashboard() {
   if (!dashboardRequest) {
     dashboardRequest = axiosInstance
-      .get("api/dq/dashboard")
+      .get("api/dq/dashboard", { skipStoredAccessToken: true })
       .then((response) => response.data)
       .catch((error) => {
         dashboardRequest = undefined;

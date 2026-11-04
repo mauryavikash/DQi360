@@ -21,9 +21,9 @@ import { getDashboard } from "@/app/lib/api";
 const KPI_PRESENTATION = {
   dq_index: { title: "Overall DQ Index", icon: BadgeCheck, iconBg: "#e7f8ee", iconColor: "#16a34a" },
   total_records: { title: "Total Customer Records", icon: Database, iconBg: "#e8f1ff", iconColor: "#2563eb" },
-  open_issues: { title: "Open Issues", icon: ClipboardList, iconBg: "#fff0f1", iconColor: "#ef476f" },
-  critical_issues: { title: "Critical Issues", icon: AlertTriangle, iconBg: "#fff1f2", iconColor: "#ef476f" },
-  duplicate_issues: { title: "Exact Duplicates", icon: Copy, iconBg: "#e8f1ff", iconColor: "#2563eb" },
+  open_issues: { title: "Open Cases", icon: ClipboardList, iconBg: "#fff0f1", iconColor: "#ef476f" },
+  critical_issues: { title: "Critical Cases", icon: AlertTriangle, iconBg: "#fff1f2", iconColor: "#ef476f" },
+  duplicate_issues: { title: "Possible Duplicates to Review", icon: Copy, iconBg: "#e8f1ff", iconColor: "#2563eb" },
   avg_remediation_age: { title: "Avg. Remediation Age", icon: Clock3, iconBg: "#e8f1ff", iconColor: "#2563eb" },
 };
 
@@ -81,9 +81,10 @@ function normalizeKpis(kpiCards = []) {
       value: item.value,
 
       change:
-        item.delta_pct !== undefined
+        item.delta_display ??
+        (Number.isFinite(item.delta_pct)
           ? `${Math.abs(item.delta_pct)}%`
-          : undefined,
+          : undefined),
 
       positive:
         item.direction === "up",
@@ -246,119 +247,3 @@ export default function DashboardPage() {
     </main>
   );
 }
-
-// "use client";
-
-// import { useEffect, useState } from "react";
-// import KpiCardsGrid from "@/components/common/KpiCardsGrid";
-// import DQi360Chart from "@/components/DQi360Dashboard/DQi360Chart";
-// import DQi360Issues from "@/components/DQi360Dashboard/DQi360Issues";
-// import DQi360Footer from "@/components/DQi360Dashboard/DQi360Footer";
-// import DQi360Header from "@/components/DQi360Dashboard/DQi360Header";
-// import { LoadingState } from "@/components/common/LoadingState";
-// import { EmptyState } from "@/components/common/EmptyState";
-// import { getDashboard } from "@/app/lib/api";
-
-// export default function DashboardPage() {
-//   const [dashboardData, setDashboardData] = useState(null);
-//   const [loading, setLoading] = useState(true);
-
-//   const [selectedPeriod, setSelectedPeriod] = useState("");
-//   const [selectedSource, setSelectedSource] = useState("");
-//   const [selectedCountry, setSelectedCountry] = useState("");
-//   const [selectedBusinessUnit, setSelectedBusinessUnit] =
-//     useState("");
-
-//   useEffect(() => {
-//     let isMounted = true;
-
-//     async function loadDashboard() {
-//       try {
-//         setLoading(true);
-
-//         const response = await getDashboard({
-//           period: selectedPeriod,
-//           source_system: selectedSource,
-//           country: selectedCountry,
-//           business_unit: selectedBusinessUnit,
-//         });
-
-//         const payload = response?.data ?? response;
-
-//         if (isMounted) {
-//           setDashboardData(payload);
-//         }
-//       } catch (err) {
-//         console.error(err);
-
-//         if (isMounted) {
-//           setDashboardData(null);
-//         }
-//       } finally {
-//         if (isMounted) {
-//           setLoading(false);
-//         }
-//       }
-//     }
-
-//     loadDashboard();
-
-//     return () => {
-//       isMounted = false;
-//     };
-//   }, [
-//     selectedPeriod,
-//     selectedSource,
-//     selectedCountry,
-//     selectedBusinessUnit,
-//   ]);
-
-//   if (loading) {
-//     return (
-//       <LoadingState label="Loading dashboard..." />
-//     );
-//   }
-
-//   if (!dashboardData) {
-//     return (
-//       <EmptyState
-//         title="No Dashboard Data"
-//         description="No data returned from API."
-//       />
-//     );
-//   }
-
-//   return (
-//     <main className="space-y-3">
-//       <DQi360Header
-//         filters={dashboardData?.filters}
-//         selectedPeriod={selectedPeriod}
-//         setSelectedPeriod={setSelectedPeriod}
-//         selectedSource={selectedSource}
-//         setSelectedSource={setSelectedSource}
-//         selectedCountry={selectedCountry}
-//         setSelectedCountry={setSelectedCountry}
-//         selectedBusinessUnit={selectedBusinessUnit}
-//         setSelectedBusinessUnit={
-//           setSelectedBusinessUnit
-//         }
-//       />
-
-//       {/* Existing Dashboard Components */}
-
-//       <KpiCardsGrid
-//         items={dashboardData?.kpis || []}
-//       />
-
-//       <DQi360Chart
-//         chartData={dashboardData}
-//       />
-
-//       <DQi360Issues
-//         issuesData={dashboardData}
-//       />
-
-//       <DQi360Footer />
-//     </main>
-//   );
-// }
