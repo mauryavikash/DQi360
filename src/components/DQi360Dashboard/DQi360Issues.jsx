@@ -36,8 +36,8 @@ export default function DQi360Issues({ issuesData }) {
       {/* ================= SOURCE SYSTEM ================= */}
       <Card>
         <div className="mb-3 flex items-center justify-between">
-          <h2 className="text-[11px] font-bold text-[#22345B]">
-            📊 Issues by Source System
+          <h2 className="text-[12px] font-bold text-[#22345B]">
+            📊 Cases by Source System
           </h2>
 
           <button className="text-[9px] font-semibold text-[#1664E8]">
@@ -124,8 +124,8 @@ export default function DQi360Issues({ issuesData }) {
       {/* ================= TOP ISSUE CATEGORIES ================= */}
       <Card>
         <div className="mb-4 flex items-center justify-between">
-          <h2 className="text-[11px] font-bold text-[#22345B]">
-            📋 Top Issue Categories
+          <h2 className="text-[12px] font-bold text-[#22345B]">
+            📋 Top Open Case Categories
           </h2>
 
           <button className="text-[9px] font-semibold text-[#1664E8]">
@@ -160,7 +160,7 @@ export default function DQi360Issues({ issuesData }) {
       {/* ================= COUNTRY SCORE ================= */}
       <Card>
         <div className="mb-4 flex items-center justify-between">
-          <h2 className="text-[11px] font-bold text-[#22345B]">
+          <h2 className="text-[12px] font-bold text-[#22345B]">
             DQ Index by Country
           </h2>
 
