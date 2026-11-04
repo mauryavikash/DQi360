@@ -45,6 +45,8 @@ function normalizeAgent(agent, index) {
   return {
     agent_id: agent?.agent_id ?? agent?.id ?? `agent-${index + 1}`,
     agent_name: agent?.agent_name ?? agent?.name ?? "Unknown Agent",
+    description: agent?.description ?? "-",
+    activity: agent?.activity ?? "-",
     status: (agent?.status ?? "").toString().toLowerCase(),
   };
 }
@@ -108,7 +110,6 @@ export default function Header({ setIsOpen, isOpen }) {
     const loadNotifications = async () => {
       try {
         // const data = await getNotifications();
-
         // setNotifications(data?.notifications || []);
       } catch (error) {
         console.error("Notification API Error:", error);
@@ -250,8 +251,12 @@ export default function Header({ setIsOpen, isOpen }) {
                       {agent.agent_name}
                     </p>
 
-                    <p className="text-[11px] text-slate-500">
-                      Agent ID: {agent.agent_id}
+                    <p className="text-[12px] text-slate-600 mt-1">
+                      <b>Description:</b> {agent.description}
+                    </p>
+
+                    <p className="text-[12px] text-slate-600 mt-1">
+                      <b>Activity:</b> {agent.activity}
                     </p>
                   </div>
 
